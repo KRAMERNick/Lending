@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Trophy, RotateCcw, Volume2, Sparkles, Copy, Check } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { SubtleBackground } from './SubtleBackground';
-import drumSetImage from 'figma:asset/f9c5a1903cc2c16dbc6fd4c231a7d0c613aca842.png';
+import drumSetImage from '/images/drum-set.png';
 
 type DrumPad = 'kick' | 'snare' | 'hihat' | 'tom1' | 'tom2' | 'tom3' | 'crash' | 'ride';
 

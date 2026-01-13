@@ -2,13 +2,13 @@ import { Award, Music, Users, Star, Play, X, ChevronLeft, ChevronRight, User } f
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { SubtleBackground } from './SubtleBackground';
 import { useState, useEffect } from 'react';
-import profilePhoto from 'figma:asset/9a7c84808894f027f24365ed3a4155afc704e9a3.png';
-import videoCover1 from 'figma:asset/4364420682c48158cc589a8501d352bf3bbc7013.png';
-import videoCover2 from 'figma:asset/20ed7f87d029627523b42771ba245745c1f142ff.png';
-import videoCover3 from 'figma:asset/c0768d8f50d011570bfe108f542b8de0b9d670a3.png';
-import videoCover4 from 'figma:asset/6a83b3e2f2f52c0a1ff9014cccf8421c35861eac.png';
-import videoCover5 from 'figma:asset/a77706c79df8d1c4de9fe08ec1957e3132e768b9.png';
-import videoCover6 from 'figma:asset/de8490f3b66ac630cea97101df7fb1083bf3eab0.png';
+import profilePhoto from '/images/profile-photo.png';
+import videoCover1 from '/images/video-cover-1.png';
+import videoCover2 from '/images/video-cover-2.png';
+import videoCover3 from '/images/video-cover-3.png';
+import videoCover4 from '/images/video-cover-4.png';
+import videoCover5 from '/images/video-cover-5.png';
+import videoCover6 from '/images/video-cover-6.png';
 
 export function About() {
   const [selectedVideo, setSelectedVideo] = useState<{ id: string; type: 'youtube' | 'rutube' | 'streamable' | 'kinescope' } | null>(null);

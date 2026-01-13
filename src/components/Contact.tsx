@@ -1,8 +1,8 @@
 import { Mail, Send, Check, MessageCircle, Send as SendIcon } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { SubtleBackground } from './SubtleBackground';
-import whatsappIcon from 'figma:asset/d45f0f82cf326f2be86a8b8d4a7dc37309a20aa4.png';
-import telegramIcon from 'figma:asset/ca003a164c2f7a1a400743a0566e295195d2093a.png';
+import whatsappIcon from '/images/whatsapp-icon.png';
+import telegramIcon from '/images/telegram-icon.png';
 import { useState } from 'react';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
 

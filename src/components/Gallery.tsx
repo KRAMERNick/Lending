@@ -2,15 +2,15 @@ import { useState, useEffect } from 'react';
 import { Play, X, Camera, ChevronLeft, ChevronRight } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { SubtleBackground } from './SubtleBackground';
-import studentPhoto1 from 'figma:asset/0f8cad6d745da7ebcd4af02866a7e546a8d0fa34.png';
-import studentPhoto2 from 'figma:asset/23ede886d79819a7330c9da22a52d6a724305991.png';
-import studentPhoto3 from 'figma:asset/d3e0da2cba3be06479716422bf23beb871551e7f.png';
-import studentVideoCover1 from 'figma:asset/df4d93e24a69f9b17ac385792c2619faa8ec3ec5.png';
-import studentVideoCover2 from 'figma:asset/b4b0a563cdc2025c3ebfb5ddd341ea61f54a3e37.png';
-import studentVideoCover3 from 'figma:asset/e43b963fa0dff232c4f57d648129675a0b3dac0f.png';
-import studentVideoCover4 from 'figma:asset/de7a2495f2f8d2f3ad84203c6a301ac495107d6b.png';
-import studentVideoCover5 from 'figma:asset/86e9f701e7365599c56df2949980f86f25ddbf35.png';
-import studentVideoCover6 from 'figma:asset/a144ceca796bf8cb0a61a132baee725039946920.png';
+import studentPhoto1 from '/images/student-photo-1.png';
+import studentPhoto2 from '/images/student-photo-2.png';
+import studentPhoto3 from '/images/student-photo-3.png';
+import studentVideoCover1 from '/images/student-video-cover-1.png';
+import studentVideoCover2 from '/images/student-video-cover-2.png';
+import studentVideoCover3 from '/images/student-video-cover-3.png';
+import studentVideoCover4 from '/images/student-video-cover-4.png';
+import studentVideoCover5 from '/images/student-video-cover-5.png';
+import studentVideoCover6 from '/images/student-video-cover-6.png';
 
 export function Gallery() {
   const [selectedVideo, setSelectedVideo] = useState<{ id: string; type: 'youtube' | 'rutube' | 'streamable' | 'kinescope' } | null>(null);

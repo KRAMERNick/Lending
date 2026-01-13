@@ -2,9 +2,9 @@ import { MapPin, Car, Clock, X } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { SubtleBackground } from './SubtleBackground';
 import { useState } from 'react';
-import studioImage1 from 'figma:asset/096d705629012b2f1004a0738c0e87bdcca91bcb.png';
-import studioImage2 from 'figma:asset/9d4831b1963db42d157a35e9ab0547b8b4c619f6.png';
-import studioImage3 from 'figma:asset/d6c8368137dc006dfeaca8a9aa289c946e8e3b32.png';
+import studioImage1 from '/images/studio-photo-1.png';
+import studioImage2 from '/images/studio-photo-2.png';
+import studioImage3 from '/images/studio-photo-3.png';
 
 export function Studio() {
   const [selectedPhoto, setSelectedPhoto] = useState<{ url: string; alt: string } | null>(null);
