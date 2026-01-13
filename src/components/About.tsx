@@ -1,4 +1,4 @@
-import { Award, Music2, Target, TrendingUp, Play, User, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Award, Music, Users, Star, Play, X, ChevronLeft, ChevronRight, User } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { SubtleBackground } from './SubtleBackground';
 import { useState, useEffect } from 'react';
@@ -55,9 +55,9 @@ export function About() {
 
   const stats = [
     { icon: Award, value: '5+', label: 'лет опыта', color: 'from-stone-700 to-stone-800' },
-    { icon: Music2, value: '100+', label: 'выступлений', color: 'from-stone-600 to-stone-700' },
-    { icon: Target, value: 'Лучшие', label: 'методики', color: 'from-stone-700 to-stone-800' },
-    { icon: TrendingUp, value: '150+', label: 'учеников', color: 'from-stone-600 to-stone-700' },
+    { icon: Music, value: '100+', label: 'выступлений', color: 'from-stone-600 to-stone-700' },
+    { icon: Star, value: 'Лучшие', label: 'методики', color: 'from-stone-700 to-stone-800' },
+    { icon: Users, value: '150+', label: 'учеников', color: 'from-stone-600 to-stone-700' },
   ];
 
   return (

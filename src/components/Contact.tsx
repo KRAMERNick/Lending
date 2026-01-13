@@ -1,4 +1,4 @@
-import { Mail, MessageCircle, Phone, Send } from 'lucide-react';
+import { Mail, Send, Check, MessageCircle, Send as SendIcon } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { SubtleBackground } from './SubtleBackground';
 import whatsappIcon from 'figma:asset/d45f0f82cf326f2be86a8b8d4a7dc37309a20aa4.png';
@@ -34,7 +34,7 @@ export function Contact() {
 
   const contactInfo = [
     { 
-      icon: Phone, 
+      icon: Send, 
       label: 'Телефон', 
       value: '+7 (901) 906-91-19',
       copyValue: '+79019069119',
@@ -284,7 +284,7 @@ export function Contact() {
                   </>
                 ) : (
                   <>
-                    <Send className="w-5 h-5" />
+                    <SendIcon className="w-5 h-5" />
                     Отправить заявку
                   </>
                 )}

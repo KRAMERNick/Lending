@@ -1,4 +1,4 @@
-import { ChevronDown, Sparkles, Play, Award, Music, Zap, Gift } from 'lucide-react';
+import { ArrowDown, Sparkles, Award, Music, Play, Gift } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { SubtleBackground } from './SubtleBackground';
 import heroPhoto from 'figma:asset/70cc53eaa605efc47b6e45338b031b360fb81a62.png';

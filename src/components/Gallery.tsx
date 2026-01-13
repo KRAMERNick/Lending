@@ -5,7 +5,6 @@ import { SubtleBackground } from './SubtleBackground';
 import studentPhoto1 from 'figma:asset/0f8cad6d745da7ebcd4af02866a7e546a8d0fa34.png';
 import studentPhoto2 from 'figma:asset/23ede886d79819a7330c9da22a52d6a724305991.png';
 import studentPhoto3 from 'figma:asset/d3e0da2cba3be06479716422bf23beb871551e7f.png';
-import lessonPhoto from 'figma:asset/e9a908edd9e62597a9a3a942f4e9aad61985d37a.png';
 import studentVideoCover1 from 'figma:asset/df4d93e24a69f9b17ac385792c2619faa8ec3ec5.png';
 import studentVideoCover2 from 'figma:asset/b4b0a563cdc2025c3ebfb5ddd341ea61f54a3e37.png';
 import studentVideoCover3 from 'figma:asset/e43b963fa0dff232c4f57d648129675a0b3dac0f.png';
