@@ -1,0 +1,6 @@
+{
+  "buildCommand": "echo 'Build step not needed for static site'",
+  "outputDirectory": ".",
+  "framework": null,
+  "devCommand": null
+}
