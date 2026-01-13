@@ -1,4 +1,5 @@
-import { Check, Sparkles, TrendingUp, Zap, DollarSign, Star } from 'lucide-react';
+import { Sparkles, TrendingUp, Zap, DollarSign, Star, Gift } from 'lucide-react';
+import { SubtleBackground } from './SubtleBackground';
 
 export function Pricing() {
   const plans = [
@@ -8,28 +9,15 @@ export function Pricing() {
       description: 'Идеально для пробного урока',
       icon: Sparkles,
       gradient: 'from-stone-700 to-stone-800',
-      features: [
-        'Индивидуальное занятие 60 минут',
-        'Профессиональное оборудование',
-        'Персональная программа обучения',
-        'Все материалы включены'
-      ],
       popular: false
     },
     {
       name: 'Абонемент на 4 занятия',
       price: '11 000',
       pricePerLesson: '2 750',
-      description: 'Экономия 250₽ с каждого урока',
+      description: 'Оптимальный выбор',
       icon: TrendingUp,
       gradient: 'from-stone-600 to-stone-700',
-      features: [
-        '4 индивидуальных занятия',
-        'Действует 1 месяц',
-        'Гибкий график посещения',
-        'Персональная программа',
-        'Отслеживание прогресса'
-      ],
       popular: true,
       savings: '1 000'
     },
@@ -40,14 +28,6 @@ export function Pricing() {
       description: 'Максимальная выгода!',
       icon: Zap,
       gradient: 'from-stone-600 to-stone-700',
-      features: [
-        '8 индивидуальных занятий',
-        'Действует 2 месяца',
-        'Приоритетное расписание',
-        'Персональная программа',
-        'Бесплатная консультация',
-        'Записи занятий для повторения'
-      ],
       popular: false,
       savings: '3 000'
     }
@@ -55,25 +35,8 @@ export function Pricing() {
 
   return (
     <section id="pricing" className="relative py-32 overflow-hidden">
-      {/* Smooth dynamic gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-stone-900 via-stone-950 to-stone-900"></div>
-      <div className="absolute inset-0 bg-gradient-to-tr from-stone-950/80 via-transparent to-stone-900/60 transform -skew-y-3"></div>
-      <div className="absolute inset-0 bg-gradient-to-br from-transparent via-stone-800/12 to-transparent animate-pulse" style={{ animationDelay: '0.8s' }}></div>
-      
-      {/* Decorative grid */}
-      <div className="absolute inset-0 opacity-[0.02]">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `
-            repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(120, 113, 108, 0.1) 60px, rgba(120, 113, 108, 0.1) 61px),
-            repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(120, 113, 108, 0.1) 60px, rgba(120, 113, 108, 0.1) 61px)
-          `
-        }}></div>
-      </div>
-      
-      {/* Floating shapes */}
-      <div className="absolute top-24 left-16 w-20 h-20 border border-stone-600/10 rounded-full animate-float"></div>
-      <div className="absolute bottom-32 right-20 w-24 h-24 border border-stone-500/12 rotate-45 animate-float-slow"></div>
-      <div className="absolute top-1/3 right-1/3 w-12 h-12 border border-stone-600/8 animate-float" style={{ animationDelay: '1s' }}></div>
+      {/* Subtle background */}
+      <SubtleBackground variant={5} />
 
       <div className="relative container mx-auto px-4">
         <div className="text-center mb-20">
@@ -147,7 +110,7 @@ export function Pricing() {
 
                   {/* Savings badge */}
                   {plan.savings && (
-                    <div className="relative mb-6 p-4 rounded-xl overflow-hidden">
+                    <div className="relative mb-8 p-4 rounded-xl overflow-hidden">
                       <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/40 to-green-900/30 backdrop-blur-sm"></div>
                       <p className="relative text-emerald-400 text-sm text-center font-bold flex items-center justify-center gap-2">
                         <Sparkles className="w-4 h-4" />
@@ -155,18 +118,6 @@ export function Pricing() {
                       </p>
                     </div>
                   )}
-
-                  {/* Features */}
-                  <ul className="space-y-4 mb-8">
-                    {plan.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="flex items-start gap-3">
-                        <div className="w-6 h-6 bg-stone-800/60 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 border border-stone-700/40">
-                          <Check className="w-3.5 h-3.5 text-stone-400" />
-                        </div>
-                        <span className="text-stone-300 text-sm leading-relaxed">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
 
                   {/* CTA Button */}
                   <button
@@ -189,10 +140,19 @@ export function Pricing() {
         </div>
 
         {/* Additional Info */}
-        <div className="mt-16 text-center">
-          <div className="inline-flex items-center gap-3 px-6 py-4 bg-stone-900/60 backdrop-blur-xl rounded-2xl border border-stone-700/40 creative-card">
-            <Sparkles className="w-5 h-5 text-stone-500" />
-            <p className="text-stone-400 text-sm">
+        <div className="mt-16 space-y-6 text-center">
+          {/* Подарочные сертификаты */}
+          <div className="inline-flex items-center gap-3 px-8 py-5 bg-gradient-to-br from-stone-800/50 to-stone-900/50 backdrop-blur-xl rounded-2xl border border-stone-700/40 shadow-xl">
+            <Gift className="w-8 h-8 sm:w-6 sm:h-6 text-stone-400 flex-shrink-0" />
+            <p className="text-stone-300 text-sm sm:text-base">
+              <span className="font-bold text-stone-200">Подарочные сертификаты</span> — доступны на любое количество занятий
+            </p>
+          </div>
+
+          {/* Игра для скидки */}
+          <div className="inline-flex items-center gap-3 px-6 py-4 bg-stone-900/60 backdrop-blur-xl rounded-2xl border border-stone-700/40">
+            <Sparkles className="w-7 h-7 sm:w-5 sm:h-5 text-stone-500 flex-shrink-0" />
+            <p className="text-stone-400 text-xs sm:text-sm">
               💡 Хотите получить <span className="text-stone-300 font-bold">скидку 50%</span> на первое занятие? Пройдите мини-игру ниже и получите промокод!
             </p>
           </div>

@@ -1,35 +1,173 @@
 import { Mail, MessageCircle, Phone, Send } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
-import whatsappIcon from 'figma:asset/17e15d8d95330ebfb7ad34056a0e0a0bf15ffd83.png';
-import telegramIcon from 'figma:asset/63d672cd159d922216bb9da97c2c7a1a9c556779.png';
+import { SubtleBackground } from './SubtleBackground';
+import whatsappIcon from 'figma:asset/d45f0f82cf326f2be86a8b8d4a7dc37309a20aa4.png';
+import telegramIcon from 'figma:asset/ca003a164c2f7a1a400743a0566e295195d2093a.png';
+import { useState } from 'react';
+import { projectId, publicAnonKey } from '../utils/supabase/info';
 
 export function Contact() {
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [statusMessage, setStatusMessage] = useState('');
+  const [copyFeedback, setCopyFeedback] = useState('');
+
   const messengers = [
     {
-      name: 'WhatsApp',
-      link: 'https://wa.me/79123456789',
-      gradient: 'from-green-600 to-emerald-700',
-      icon: whatsappIcon
-    },
-    {
       name: 'Telegram',
-      link: 'https://t.me/nikolaybokarev',
+      link: 'https://t.me/nikolaibokarev',
       gradient: 'from-blue-600 to-sky-700',
       icon: telegramIcon
+    },
+    {
+      name: 'WhatsApp',
+      link: 'https://wa.me/79019069119',
+      gradient: 'from-green-600 to-emerald-700',
+      icon: whatsappIcon
     }
   ];
 
   const contactInfo = [
-    { icon: Phone, label: 'Телефон', value: '+7 (912) 345-67-89' },
-    { icon: Mail, label: 'Email', value: 'nikolay.bokarev@mail.ru' },
-    { icon: MessageCircle, label: 'Адрес', value: 'Ленинградский просп., 47, стр. 1' },
+    { 
+      icon: Phone, 
+      label: 'Телефон', 
+      value: '+7 (901) 906-91-19',
+      copyValue: '+79019069119',
+      type: 'copy' as const
+    },
+    { 
+      icon: Mail, 
+      label: 'Email', 
+      value: 'bn-school@yandex.ru',
+      copyValue: 'bn-school@yandex.ru',
+      type: 'copy' as const
+    },
+    { 
+      icon: MessageCircle, 
+      label: 'Адрес', 
+      value: 'Ленинградский просп., 47, стр. 1',
+      link: 'https://yandex.ru/maps/?pt=37.530822,55.799806&z=17&l=map',
+      type: 'link' as const
+    },
   ];
 
+  const handleCopy = (text: string, label: string) => {
+    try {
+      // Use execCommand method which works in iframes and doesn't require permissions
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-999999px';
+      textArea.style.top = '-999999px';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      
+      try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+          setCopyFeedback(`${label} скопирован!`);
+          setTimeout(() => setCopyFeedback(''), 2000);
+        } else {
+          // If execCommand fails, show text to copy manually
+          setCopyFeedback(`Скопируйте: ${text}`);
+          setTimeout(() => setCopyFeedback(''), 4000);
+        }
+      } finally {
+        document.body.removeChild(textArea);
+      }
+    } catch (err) {
+      console.error('Failed to copy:', err);
+      // Show the text to user so they can copy manually
+      setCopyFeedback(`Скопируйте: ${text}`);
+      setTimeout(() => setCopyFeedback(''), 4000);
+    }
+  };
+
+  const handleContactClick = (info: typeof contactInfo[number]) => {
+    if (info.type === 'copy' && info.copyValue) {
+      handleCopy(info.copyValue, info.label);
+    } else if (info.type === 'link' && info.link) {
+      window.open(info.link, '_blank', 'noopener,noreferrer');
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!formData.name || !formData.phone) {
+      setSubmitStatus('error');
+      setStatusMessage('Пожалуйста, заполните имя и телефон');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
+
+    try {
+      console.log('Submitting form data:', formData);
+      
+      const response = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-e4ef8ce5/contact`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${publicAnonKey}`
+          },
+          body: JSON.stringify(formData)
+        }
+      );
+
+      console.log('Response status:', response.status);
+      
+      const data = await response.json();
+      console.log('Response data:', data);
+
+      if (response.ok && data.success) {
+        setSubmitStatus('success');
+        setStatusMessage(data.message);
+        setFormData({ name: '', phone: '', message: '' });
+        
+        // Log any email errors from server
+        if (data.emailError) {
+          console.error('Server email error:', data.emailError);
+        }
+      } else {
+        setSubmitStatus('error');
+        setStatusMessage(data.error || 'Произошла ошибка. Попробуйте позже.');
+        console.error('Server error:', data);
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setSubmitStatus('error');
+      setStatusMessage('Произошла ошибка при отправке. Попробуйте связаться через WhatsApp или Telegram.');
+    } finally {
+      setIsSubmitting(false);
+      // Reset status message after 5 seconds
+      setTimeout(() => {
+        setSubmitStatus('idle');
+        setStatusMessage('');
+      }, 5000);
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
   return (
-    <section id="contact" className="py-24 relative overflow-hidden bg-gradient-to-b from-stone-950 to-stone-900">
-      {/* Smooth dynamic gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-stone-900/60 via-transparent to-stone-950/50"></div>
-      <div className="absolute inset-0 bg-gradient-to-bl from-transparent via-stone-800/12 to-transparent animate-pulse" style={{ animationDelay: '2s' }}></div>
+    <section id="contact" className="py-24 relative overflow-hidden">
+      {/* Subtle background */}
+      <SubtleBackground variant={1} />
       
       {/* Floating shapes */}
       <div className="absolute top-24 right-20 w-20 h-20 border border-stone-600/10 rounded-full animate-float"></div>
@@ -61,11 +199,11 @@ export function Contact() {
                 rel="noopener noreferrer"
                 className={`relative overflow-hidden flex flex-col items-center justify-center gap-3 p-6 rounded-2xl text-white transition-all transform hover:scale-105 shadow-lg shadow-stone-900/20 bg-gradient-to-br ${messenger.gradient}`}
               >
-                <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center overflow-hidden">
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center overflow-hidden">
                   <ImageWithFallback
                     src={messenger.icon}
                     alt={`${messenger.name} logo`}
-                    className="w-10 h-10 object-contain"
+                    className="w-10 h-10 object-contain brightness-0 invert"
                   />
                 </div>
                 <span className="font-medium">{messenger.name}</span>
@@ -78,12 +216,21 @@ export function Contact() {
             {contactInfo.map((info, index) => {
               const Icon = info.icon;
               return (
-                <div key={index} className="bg-stone-900/60 backdrop-blur-sm rounded-2xl p-6 text-center border border-stone-800/20 hover:shadow-lg hover:shadow-stone-900/30 transition-all">
+                <div 
+                  key={index} 
+                  className="bg-stone-900/60 backdrop-blur-sm rounded-2xl p-6 text-center border border-stone-800/20 hover:shadow-lg hover:shadow-stone-900/30 transition-all cursor-pointer hover:scale-105 active:scale-95"
+                  onClick={() => handleContactClick(info)}
+                >
                   <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-stone-600 to-stone-700 rounded-xl mb-4 shadow-lg shadow-stone-900/50">
                     <Icon className="w-7 h-7 text-stone-100" />
                   </div>
                   <div className="text-stone-400 text-sm mb-2">{info.label}</div>
-                  <div className="text-stone-100 font-medium">{info.value}</div>
+                  <div className="text-stone-100 font-medium hover:text-stone-200 transition-colors">
+                    {info.value}
+                  </div>
+                  <div className="text-stone-600 text-xs mt-2">
+                    {info.type === 'copy' ? 'Нажмите, чтобы скопировать' : 'Нажмите, чтобы открыть в Яндекс.Картах'}
+                  </div>
                 </div>
               );
             })}
@@ -94,11 +241,14 @@ export function Contact() {
             <h3 className="text-stone-100 mb-6 text-center">
               Быстрая заявка на урок
             </h3>
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleSubmit}>
               <div>
                 <input
                   type="text"
                   placeholder="Ваше имя"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
                   className="w-full px-5 py-4 bg-stone-800/60 border-2 border-stone-800/30 rounded-xl text-stone-100 placeholder-stone-500 focus:border-stone-700/50 focus:outline-none transition-colors"
                 />
               </div>
@@ -106,6 +256,9 @@ export function Contact() {
                 <input
                   type="tel"
                   placeholder="Телефон"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleInputChange}
                   className="w-full px-5 py-4 bg-stone-800/60 border-2 border-stone-800/30 rounded-xl text-stone-100 placeholder-stone-500 focus:border-stone-700/50 focus:outline-none transition-colors"
                 />
               </div>
@@ -113,19 +266,43 @@ export function Contact() {
                 <textarea
                   rows={4}
                   placeholder="Сообщение (необязательно)"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleInputChange}
                   className="w-full px-5 py-4 bg-stone-800/60 border-2 border-stone-800/30 rounded-xl text-stone-100 placeholder-stone-500 focus:border-stone-700/50 focus:outline-none resize-none transition-colors"
                 ></textarea>
               </div>
               <button
                 type="submit"
-                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-stone-600 to-stone-700 text-stone-100 rounded-xl hover:shadow-lg hover:shadow-stone-900/50 transition-all transform hover:scale-[1.02]"
+                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-stone-600 to-stone-700 text-stone-100 rounded-xl hover:shadow-lg hover:shadow-stone-900/50 transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                disabled={isSubmitting}
               >
-                <Send className="w-5 h-5" />
-                Отправить заявку
+                {isSubmitting ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-stone-100 border-t-transparent rounded-full animate-spin"></div>
+                    Отправка...
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-5 h-5" />
+                    Отправить заявку
+                  </>
+                )}
               </button>
-              <p className="text-stone-500 text-sm text-center">
-                Это демо-форма. В реальной версии данные будут отправляться на ваш email или в мессенджеры.
-              </p>
+              {submitStatus !== 'idle' && (
+                <div
+                  className={`mt-4 text-center ${
+                    submitStatus === 'success' ? 'text-green-500' : 'text-red-500'
+                  }`}
+                >
+                  {statusMessage}
+                </div>
+              )}
+              {copyFeedback && (
+                <div className="mt-4 text-center text-green-500">
+                  {copyFeedback}
+                </div>
+              )}
             </form>
           </div>
         </div>

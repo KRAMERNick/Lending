@@ -1,5 +1,6 @@
 import { MapPin, Car, Clock, X, Building2, Music } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
+import { SubtleBackground } from './SubtleBackground';
 import { useState } from 'react';
 import studioImage1 from 'figma:asset/096d705629012b2f1004a0738c0e87bdcca91bcb.png';
 import studioImage2 from 'figma:asset/9d4831b1963db42d157a35e9ab0547b8b4c619f6.png';
@@ -15,10 +16,9 @@ export function Studio() {
   ];
 
   return (
-    <section id="studio" className="py-24 relative overflow-hidden bg-gradient-to-b from-stone-900 to-stone-950">
-      {/* Smooth dynamic gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-stone-950/70 via-transparent to-stone-900/50"></div>
-      <div className="absolute inset-0 bg-gradient-to-bl from-transparent via-stone-800/8 to-transparent animate-pulse" style={{ animationDelay: '1.2s' }}></div>
+    <section id="studio" className="py-24 relative overflow-hidden">
+      {/* Subtle background */}
+      <SubtleBackground variant={4} />
       
       {/* Floating shapes */}
       <div className="absolute top-20 right-24 w-16 h-16 border border-stone-600/10 rounded-full animate-float"></div>
@@ -89,7 +89,7 @@ export function Studio() {
                   <MapPin className="w-6 h-6 text-stone-100" />
                 </div>
                 <div>
-                  <h4 className="text-stone-100 mb-2">Адрес студии</h4>
+                  <h3 className="text-stone-100 mb-2">Адрес студии</h3>
                   <p className="text-stone-300 text-sm">
                     Москва, Ленинградский просп., 47, стр. 1
                   </p>
@@ -103,7 +103,7 @@ export function Studio() {
                   <Car className="w-6 h-6 text-stone-100" />
                 </div>
                 <div>
-                  <h4 className="text-stone-100 mb-2">Выездные занятия</h4>
+                  <h3 className="text-stone-100 mb-2">Выездные занятия</h3>
                   <p className="text-stone-300 text-sm">
                     Провожу занятия с выездом на другие площадки по всей Москве.
                   </p>
@@ -130,11 +130,8 @@ export function Studio() {
             <ImageWithFallback
               src={selectedPhoto.url}
               alt={selectedPhoto.alt}
-              className="max-w-full max-h-[90vh] object-contain rounded-2xl"
+              className="max-w-full max-h-[90vh] object-contain"
             />
-          </div>
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-stone-900/80 backdrop-blur-md px-6 py-3 rounded-full border border-stone-700/50">
-            <p className="text-stone-200 text-center">{selectedPhoto.alt}</p>
           </div>
         </div>
       )}

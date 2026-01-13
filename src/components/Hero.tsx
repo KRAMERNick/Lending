@@ -1,5 +1,6 @@
-import { ChevronDown, Sparkles, Play, Award, Music, Zap } from 'lucide-react';
+import { ChevronDown, Sparkles, Play, Award, Music, Zap, Gift } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
+import { SubtleBackground } from './SubtleBackground';
 import heroPhoto from 'figma:asset/70cc53eaa605efc47b6e45338b031b360fb81a62.png';
 
 export function Hero() {
@@ -12,51 +13,22 @@ export function Hero() {
 
   return (
     <section id="hero" className="relative min-h-screen flex items-center overflow-hidden pt-20 noise-overlay">
-      {/* Smooth dynamic gradient background */}
-      <div className="absolute inset-0 z-0">
-        {/* Base gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-stone-950 via-stone-900 to-stone-950"></div>
-        
-        {/* Animated gradient overlays - very smooth */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-stone-800/20 via-transparent to-stone-700/15 animate-pulse"></div>
-        <div className="absolute inset-0 bg-gradient-to-bl from-transparent via-stone-800/10 to-transparent" style={{ animation: 'pulse 4s ease-in-out infinite', animationDelay: '1s' }}></div>
-        
-        {/* Floating particles - soft and subtle */}
-        <div className="absolute top-1/4 left-1/4 w-3 h-3 bg-stone-500/20 rounded-full blur-sm animate-float"></div>
-        <div className="absolute top-1/3 right-1/3 w-2 h-2 bg-stone-600/15 rounded-full blur-sm animate-float-slow" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute bottom-1/3 left-1/2 w-4 h-4 bg-stone-500/10 rounded-full blur-md animate-float" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute top-2/3 right-1/4 w-3 h-3 bg-stone-600/12 rounded-full blur-sm animate-float-slow" style={{ animationDelay: '3s' }}></div>
-        
-        {/* Rhythmic pattern grid */}
-        <div className="absolute inset-0 opacity-[0.03]">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `
-              repeating-linear-gradient(0deg, transparent, transparent 50px, rgba(120, 113, 108, 0.1) 50px, rgba(120, 113, 108, 0.1) 51px),
-              repeating-linear-gradient(90deg, transparent, transparent 50px, rgba(120, 113, 108, 0.1) 50px, rgba(120, 113, 108, 0.1) 51px)
-            `
-          }}></div>
-        </div>
-
-        {/* Soft wave lines - very subtle */}
-        <div className="absolute top-1/4 left-0 w-1/3 h-px bg-gradient-to-r from-stone-600/10 via-stone-500/15 to-transparent animate-pulse"></div>
-        <div className="absolute bottom-1/3 right-0 w-2/5 h-px bg-gradient-to-l from-stone-600/10 via-stone-500/15 to-transparent animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-1/2 left-1/4 w-1/4 h-px bg-gradient-to-r from-transparent via-stone-600/8 to-transparent animate-pulse" style={{ animationDelay: '2s' }}></div>
-      </div>
+      {/* Subtle background */}
+      <SubtleBackground variant={1} />
 
       {/* Asymmetric Content Layout */}
       <div className="relative z-10 container mx-auto px-4">
         <div className="grid lg:grid-cols-12 gap-8 items-center">
           {/* Left side - Bold Typography (7 columns) */}
-          <div className="lg:col-span-7">
+          <div className="lg:col-span-7 order-2 lg:order-1">
             {/* Floating badge */}
             <div className="inline-flex items-center gap-2 px-5 py-3 bg-stone-800/50 backdrop-blur-xl rounded-full mb-8 border border-stone-700/50 hover:border-stone-600/70 transition-all hover:scale-105 creative-card shadow-xl shadow-stone-900/30">
               <Sparkles className="w-4 h-4 text-stone-400" />
               <span className="text-stone-300 text-sm font-medium">Профессиональное обучение</span>
-              <Zap className="w-4 h-4 text-stone-500" />
             </div>
             
             {/* Oversized bold typography */}
-            <h1 className="mb-6 leading-[0.85] tracking-tighter perspective-container">
+            <h1 className="mb-6 leading-[1.1] tracking-tighter perspective-container pt-2">
               <span className="block gradient-text hover:scale-105 transition-transform inline-block">НИКОЛАЙ</span><br/>
               <span className="block text-stone-200 -mt-2">БОКАРЕВ</span>
             </h1>
@@ -108,31 +80,24 @@ export function Hero() {
               </button>
               <button
                 onClick={() => document.getElementById('game')?.scrollIntoView({ behavior: 'smooth' })}
-                className="px-10 py-5 bg-stone-900/70 backdrop-blur-sm border-2 border-stone-700/60 text-stone-300 rounded-full hover:bg-stone-800/70 hover:border-stone-600/80 transform hover:scale-105 transition-all font-bold text-lg shimmer-card"
+                className="px-10 py-5 bg-stone-900/70 backdrop-blur-sm border-2 border-stone-700/60 text-stone-300 rounded-full hover:bg-stone-800/70 hover:border-stone-600/80 transition-all font-bold text-lg shimmer-card flex items-center justify-center gap-2"
               >
-                🎁 Получить скидку 50%
+                <Gift className="w-5 h-5 text-stone-400" />
+                Получить скидку 50%
               </button>
             </div>
           </div>
 
           {/* Right side - Image with creative layout (5 columns) */}
-          <div className="lg:col-span-5 perspective-container">
+          <div className="lg:col-span-5 perspective-container order-1 lg:order-2">
             <div className="relative">
-              {/* Decorative elements - animated */}
-              <div className="absolute -top-8 -right-8 w-32 h-32 border-2 border-stone-700/30 rounded-full animate-pulse-glow"></div>
-              <div className="absolute -bottom-8 -left-8 w-40 h-40 bg-stone-700/10 blur-2xl animate-morphing" style={{ filter: 'blur(40px)' }}></div>
-              
-              {/* Animated floating shapes */}
-              <div className="absolute top-10 right-10 w-20 h-20 border border-stone-600/20 rotate-45 animate-float"></div>
-              <div className="absolute bottom-20 left-10 w-16 h-16 border border-stone-500/15 rounded-full animate-float-slow"></div>
-              
-              {/* Main image with tilt effect */}
-              <div className="relative group creative-card">
-                <div className="relative overflow-hidden rounded-3xl image-hover-zoom">
+              {/* Main image */}
+              <div className="relative">
+                <div className="relative overflow-hidden rounded-3xl">
                   <ImageWithFallback
                     src={heroPhoto}
                     alt="Николай Бокарев"
-                    className="w-full h-[600px] object-cover"
+                    className="w-full h-[350px] sm:h-[450px] lg:h-[600px] object-cover"
                   />
                   {/* Gradient overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-stone-950/20 to-transparent"></div>

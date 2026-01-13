@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
-import { Trophy, RotateCcw, Volume2, Sparkles } from 'lucide-react';
+import { Trophy, RotateCcw, Volume2, Sparkles, Copy, Check } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
-import drumSetImage from 'figma:asset/894d7096c6ee7ab2d6ea0fdb89c2e91b89636037.png';
+import { SubtleBackground } from './SubtleBackground';
+import drumSetImage from 'figma:asset/f9c5a1903cc2c16dbc6fd4c231a7d0c613aca842.png';
 
 type DrumPad = 'kick' | 'snare' | 'hihat' | 'tom1' | 'tom2' | 'tom3' | 'crash' | 'ride';
 
@@ -14,6 +15,18 @@ interface HitZone {
   key: string;
 }
 
+// Ссылки на аудиофайлы
+const drumSounds: Record<DrumPad, string> = {
+  kick: 'https://raw.githubusercontent.com/KRAMERNick/Drum-sounds/main/Kick.mp3',
+  snare: 'https://raw.githubusercontent.com/KRAMERNick/Drum-sounds/main/Snare.mp3',
+  hihat: 'https://raw.githubusercontent.com/KRAMERNick/Drum-sounds/main/Hi-Hat.mp3',
+  tom1: 'https://raw.githubusercontent.com/KRAMERNick/Drum-sounds/main/Tom%201.mp3',
+  tom2: 'https://raw.githubusercontent.com/KRAMERNick/Drum-sounds/main/Tom%202.mp3',
+  tom3: 'https://raw.githubusercontent.com/KRAMERNick/Drum-sounds/main/Tom%203.mp3',
+  crash: 'https://raw.githubusercontent.com/KRAMERNick/Drum-sounds/main/Crash.mp3',
+  ride: 'https://raw.githubusercontent.com/KRAMERNick/Drum-sounds/main/Ride.mp3'
+};
+
 export function DrumGame() {
   const [userPattern, setUserPattern] = useState<DrumPad[]>([]);
   const [isWinner, setIsWinner] = useState(false);
@@ -23,183 +36,63 @@ export function DrumGame() {
   const [copiedPromo, setCopiedPromo] = useState(false);
   const [activePad, setActivePad] = useState<DrumPad | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
+  const audioBuffersRef = useRef<Record<string, AudioBuffer>>({});
 
-  // Паттерн: Kick-Kick-Snare-Kick-Kick-Snare
-  const targetPattern: DrumPad[] = ['kick', 'kick', 'snare', 'kick', 'kick', 'snare'];
+  // Паттерн: Kick-Snare-Kick-Kick-Snare-Crash
+  const targetPattern: DrumPad[] = ['kick', 'snare', 'kick', 'kick', 'snare', 'crash'];
 
   // Круглые зоны для барабанов на новом изображении
   const hitZones: HitZone[] = [
-    { id: 'crash', name: 'Crash', cx: 29, cy: 22, r: 8, key: '1' },
+    { id: 'crash', name: 'Crash', cx: 29, cy: 18, r: 8, key: '1' },
     { id: 'ride', name: 'Ride', cx: 75, cy: 24, r: 9, key: '2' },
     { id: 'hihat', name: 'Hi-Hat', cx: 16, cy: 36, r: 7, key: 'Q' },
-    { id: 'tom1', name: 'Tom 1', cx: 41, cy: 28, r: 7, key: 'W' },
-    { id: 'tom2', name: 'Tom 2', cx: 58, cy: 29, r: 7, key: 'E' },
-    { id: 'tom3', name: 'Tom 3', cx: 71, cy: 48, r: 8, key: 'R' },
-    { id: 'snare', name: 'Snare', cx: 33, cy: 45, r: 8, key: 'A' },
-    { id: 'kick', name: 'Kick', cx: 52, cy: 54, r: 12, key: 'Space' },
+    { id: 'tom1', name: 'Tom 1', cx: 40, cy: 28, r: 7, key: 'W' },
+    { id: 'tom2', name: 'Tom 2', cx: 55, cy: 28, r: 7, key: 'E' },
+    { id: 'tom3', name: 'Tom 3', cx: 71, cy: 44, r: 8, key: 'R' },
+    { id: 'snare', name: 'Snare', cx: 35, cy: 42, r: 8, key: 'A' },
+    { id: 'kick', name: 'Kick', cx: 50, cy: 54, r: 12, key: 'Space' },
   ];
 
-  // Студийные барабанные звуки
-  const playStudioDrumSound = (pad: DrumPad) => {
-    if (!audioContextRef.current) {
-      audioContextRef.current = new AudioContext();
+  // Загрузка аудиофайлов
+  const loadAudio = async (url: string) => {
+    try {
+      const response = await fetch(url, { mode: 'cors' });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const arrayBuffer = await response.arrayBuffer();
+      const audioContext = audioContextRef.current || new AudioContext();
+      const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+      return audioBuffer;
+    } catch (error) {
+      console.error(`Error loading audio from ${url}:`, error);
+      return null;
     }
-    const ctx = audioContextRef.current;
-    const now = ctx.currentTime;
+  };
 
-    if (pad === 'kick') {
-      const osc1 = ctx.createOscillator();
-      const osc2 = ctx.createOscillator();
-      const gain = ctx.createGain();
-      const filter = ctx.createBiquadFilter();
-      
-      filter.type = 'lowpass';
-      filter.frequency.value = 100;
-      
-      osc1.connect(filter);
-      osc2.connect(filter);
-      filter.connect(gain);
-      gain.connect(ctx.destination);
-      
-      osc1.frequency.setValueAtTime(120, now);
-      osc1.frequency.exponentialRampToValueAtTime(50, now + 0.05);
-      osc1.frequency.exponentialRampToValueAtTime(40, now + 0.3);
-      
-      osc2.frequency.setValueAtTime(180, now);
-      osc2.frequency.exponentialRampToValueAtTime(60, now + 0.05);
-      
-      gain.gain.setValueAtTime(1.2, now);
-      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
-      
-      osc1.start(now);
-      osc2.start(now);
-      osc1.stop(now + 0.6);
-      osc2.stop(now + 0.6);
-      
-    } else if (pad === 'snare') {
-      const osc = ctx.createOscillator();
-      const noise = ctx.createBufferSource();
-      const noiseBuffer = ctx.createBuffer(1, ctx.sampleRate * 0.4, ctx.sampleRate);
-      const noiseData = noiseBuffer.getChannelData(0);
-      
-      for (let i = 0; i < noiseData.length; i++) {
-        noiseData[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.05));
-      }
-      noise.buffer = noiseBuffer;
-      
-      const oscGain = ctx.createGain();
-      const noiseGain = ctx.createGain();
-      const noiseFilter = ctx.createBiquadFilter();
-      
-      noiseFilter.type = 'highpass';
-      noiseFilter.frequency.value = 2000;
-      noiseFilter.Q.value = 1;
-      
-      osc.connect(oscGain);
-      noise.connect(noiseFilter);
-      noiseFilter.connect(noiseGain);
-      oscGain.connect(ctx.destination);
-      noiseGain.connect(ctx.destination);
-      
-      osc.frequency.setValueAtTime(220, now);
-      osc.frequency.exponentialRampToValueAtTime(180, now + 0.1);
-      
-      oscGain.gain.setValueAtTime(0.6, now);
-      oscGain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
-      
-      noiseGain.gain.setValueAtTime(0.8, now);
-      noiseGain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
-      
-      osc.start(now);
-      noise.start(now);
-      osc.stop(now + 0.15);
-      noise.stop(now + 0.2);
-      
-    } else if (pad === 'hihat') {
-      const noise = ctx.createBufferSource();
-      const noiseBuffer = ctx.createBuffer(1, ctx.sampleRate * 0.08, ctx.sampleRate);
-      const noiseData = noiseBuffer.getChannelData(0);
-      
-      for (let i = 0; i < noiseData.length; i++) {
-        noiseData[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.02));
-      }
-      noise.buffer = noiseBuffer;
-      
-      const filter = ctx.createBiquadFilter();
-      filter.type = 'bandpass';
-      filter.frequency.value = 8000;
-      filter.Q.value = 2;
-      
-      const gain = ctx.createGain();
-      
-      noise.connect(filter);
-      filter.connect(gain);
-      gain.connect(ctx.destination);
-      
-      gain.gain.setValueAtTime(0.4, now);
-      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
-      
-      noise.start(now);
-      noise.stop(now + 0.06);
-      
-    } else if (pad === 'crash' || pad === 'ride') {
-      const noise = ctx.createBufferSource();
-      const duration = pad === 'crash' ? 3 : 2;
-      const noiseBuffer = ctx.createBuffer(2, ctx.sampleRate * duration, ctx.sampleRate);
-      
-      for (let channel = 0; channel < 2; channel++) {
-        const data = noiseBuffer.getChannelData(channel);
-        for (let i = 0; i < data.length; i++) {
-          data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.8));
-        }
-      }
-      noise.buffer = noiseBuffer;
-      
-      const filter = ctx.createBiquadFilter();
-      filter.type = 'bandpass';
-      filter.frequency.value = pad === 'crash' ? 4000 : 3000;
-      filter.Q.value = 0.7;
-      
-      const gain = ctx.createGain();
-      
-      noise.connect(filter);
-      filter.connect(gain);
-      gain.connect(ctx.destination);
-      
-      gain.gain.setValueAtTime(0.5, now);
-      gain.gain.exponentialRampToValueAtTime(0.01, now + duration - 0.5);
-      
-      noise.start(now);
-      noise.stop(now + duration);
-      
-    } else if (pad === 'tom1' || pad === 'tom2' || pad === 'tom3') {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      const filter = ctx.createBiquadFilter();
-      
-      filter.type = 'lowpass';
-      filter.frequency.value = 1000;
-      
-      osc.connect(filter);
-      filter.connect(gain);
-      gain.connect(ctx.destination);
-      
-      const freq = pad === 'tom1' ? 160 : pad === 'tom2' ? 120 : 100;
-      osc.frequency.setValueAtTime(freq, now);
-      osc.frequency.exponentialRampToValueAtTime(freq * 0.5, now + 0.2);
-      
-      gain.gain.setValueAtTime(0.9, now);
-      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
-      
-      osc.start(now);
-      osc.stop(now + 0.5);
+  // Проигрывание аудио
+  const playDrumSound = (pad: DrumPad) => {
+    const audioContext = audioContextRef.current || new AudioContext();
+    audioContextRef.current = audioContext;
+    const audioBuffer = audioBuffersRef.current[pad];
+    
+    if (audioBuffer) {
+      const source = audioContext.createBufferSource();
+      source.buffer = audioBuffer;
+      source.connect(audioContext.destination);
+      source.start();
+    } else {
+      // Fallback: используем HTML5 Audio API
+      const audio = new Audio(drumSounds[pad]);
+      audio.volume = 0.7;
+      audio.play().catch(err => console.error('Error playing audio:', err));
     }
   };
 
   const handlePadClick = (pad: DrumPad) => {
     if (isWinner) return;
 
-    playStudioDrumSound(pad);
+    playDrumSound(pad);
     setActivePad(pad);
     setTimeout(() => setActivePad(null), 150);
 
@@ -228,8 +121,45 @@ export function DrumGame() {
     setCopiedPromo(false);
   };
 
+  const copyPromoCode = async () => {
+    try {
+      // Пробуем современный Clipboard API
+      await navigator.clipboard.writeText('РИТМ50');
+      setCopiedPromo(true);
+      setTimeout(() => setCopiedPromo(false), 2000);
+    } catch (err) {
+      // Fallback для старых браузеров или когда Clipboard API заблокирован
+      try {
+        const textArea = document.createElement('textarea');
+        textArea.value = 'РИТМ50';
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        document.execCommand('copy');
+        textArea.remove();
+        setCopiedPromo(true);
+        setTimeout(() => setCopiedPromo(false), 2000);
+      } catch (fallbackErr) {
+        console.error('Failed to copy:', fallbackErr);
+        // Показываем сообщение об ошибке пользователю
+        alert('Не удалось скопировать. Промокод: РИТМ50');
+      }
+    }
+  };
+
+  // Убираем функционал клавиатуры - комментируем useEffect
+  /*
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
+      // Ignore keyboard events when user is typing in an input field
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+        return;
+      }
+
       const zone = hitZones.find(z => 
         z.key === e.key.toUpperCase() || (e.key === ' ' && z.key === 'Space')
       );
@@ -241,6 +171,12 @@ export function DrumGame() {
     };
 
     const handleKeyRelease = (e: KeyboardEvent) => {
+      // Ignore keyboard events when user is typing in an input field
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+        return;
+      }
+
       const zone = hitZones.find(z => 
         z.key === e.key.toUpperCase() || (e.key === ' ' && z.key === 'Space')
       );
@@ -261,19 +197,28 @@ export function DrumGame() {
       window.removeEventListener('keyup', handleKeyRelease);
     };
   }, [userPattern, isWinner]);
+  */
+
+  useEffect(() => {
+    const loadAllSounds = async () => {
+      const buffers: Record<string, AudioBuffer> = {};
+      for (const [pad, url] of Object.entries(drumSounds)) {
+        if (url) {
+          buffers[pad] = await loadAudio(url);
+        }
+      }
+      audioBuffersRef.current = buffers;
+    };
+
+    loadAllSounds();
+  }, []);
 
   return (
-    <section id="game" className="py-24 relative overflow-hidden bg-gradient-to-b from-stone-900 to-stone-950">
-      {/* Smooth dynamic gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-stone-950/60 via-transparent to-stone-900/50"></div>
-      <div className="absolute inset-0 bg-gradient-to-bl from-transparent via-stone-800/10 to-transparent animate-pulse" style={{ animationDelay: '1.5s' }}></div>
+    <section id="game" className="py-24 relative overflow-hidden">
+      {/* Subtle background */}
+      <SubtleBackground variant={6} />
       
-      {/* Floating shapes */}
-      <div className="absolute top-16 left-24 w-18 h-18 border border-stone-600/12 rounded-full animate-float"></div>
-      <div className="absolute bottom-20 right-28 w-22 h-22 border border-stone-500/10 rotate-45 animate-float-slow"></div>
-      <div className="absolute top-1/2 left-1/3 w-14 h-14 border border-stone-600/8 animate-float" style={{ animationDelay: '1.2s' }}></div>
-      
-      <div className="container mx-auto px-4 relative">
+      <div className="container mx-auto px-2 sm:px-4 relative">
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-stone-800/30 backdrop-blur-sm rounded-full mb-4 border border-stone-700/30">
             <Sparkles className="w-4 h-4 text-stone-400" />
@@ -282,25 +227,35 @@ export function DrumGame() {
           <h2 className="text-stone-100 mb-4">
             Получите скидку 50%!
           </h2>
-          <p className="text-stone-400">
+          <p className="text-stone-400 px-4">
             Сыграйте правильный ритм и получите промокод на скидку первого урока
           </p>
         </div>
 
         <div className="max-w-6xl mx-auto">
-          <div className="bg-stone-900/60 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-stone-800/20">
+          <div className="bg-stone-900/60 backdrop-blur-sm rounded-3xl p-2 sm:p-8 shadow-2xl border border-stone-800/20">
             {/* Instructions */}
             {!gameStarted && !isWinner && (
-              <div className="mb-8 p-6 bg-gradient-to-r from-stone-800/20 to-stone-900/20 border-2 border-stone-700/30 rounded-2xl">
-                <div className="flex items-start gap-3">
-                  <Volume2 className="w-6 h-6 text-stone-400 flex-shrink-0 mt-1" />
-                  <div>
-                    <h3 className="text-stone-100 mb-2">Задание:</h3>
-                    <p className="text-stone-300 mb-3">
-                      Сыграйте ритм: <span className="font-semibold text-stone-400">Kick → Kick → Snare → Kick → Kick → Snare</span>
-                    </p>
-                    <p className="text-stone-400 text-sm">
-                      Кликайте на барабаны или используйте клавиши (Space для Kick, A для Snare)
+              <div className="mb-8 p-6 sm:p-8 bg-gradient-to-br from-stone-800/30 to-stone-900/30 border-2 border-stone-700/40 rounded-2xl shadow-xl">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-stone-600 to-stone-700 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <Volume2 className="w-6 h-6 sm:w-7 sm:h-7 text-stone-100" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-stone-100 text-xl sm:text-2xl font-bold mb-3 flex items-center gap-2">
+                      <Sparkles className="w-5 h-5 text-stone-400" />
+                      Задание для получения скидки:
+                    </h3>
+                    <div className="bg-stone-950/50 p-4 rounded-xl border border-stone-700/30 mb-3">
+                      <p className="text-stone-200 text-base sm:text-lg font-semibold mb-2">
+                        Сыграйте ритм:
+                      </p>
+                      <p className="text-stone-300 text-lg sm:text-2xl font-black tracking-wide">
+                        Kick → Snare → Kick → Kick → Snare → Crash
+                      </p>
+                    </div>
+                    <p className="text-stone-400 text-sm sm:text-base">
+                      💡 <span className="font-semibold">Подсказка:</span> Кликайте на барабаны на изображении выше
                     </p>
                   </div>
                 </div>
@@ -394,10 +349,23 @@ export function DrumGame() {
                 <p className="text-stone-300 mb-6">
                   Вы правильно сыграли ритм! Получите <span className="font-bold text-stone-400">скидку 50%</span> на первый урок!
                 </p>
-                <div className="inline-block px-8 py-4 bg-gradient-to-r from-stone-800/30 to-stone-900/30 rounded-xl mb-8 border-2 border-stone-700/50">
+                <div className="inline-block px-8 py-4 bg-gradient-to-r from-stone-800/30 to-stone-900/30 rounded-xl mb-2 border-2 border-stone-700/50">
                   <p className="text-stone-400 text-sm mb-1">Ваш промокод:</p>
-                  <p className="text-stone-100 font-bold text-3xl text-stone-400">RHYTHM50</p>
+                  <button
+                    onClick={copyPromoCode}
+                    className="group flex items-center gap-2 mx-auto transition-all hover:scale-105"
+                  >
+                    <p className="text-stone-100 font-bold text-3xl">РИТМ50</p>
+                    {copiedPromo ? (
+                      <Check className="w-6 h-6 text-green-500" />
+                    ) : (
+                      <Copy className="w-6 h-6 text-stone-400 group-hover:text-stone-300 transition-colors" />
+                    )}
+                  </button>
                 </div>
+                <p className="text-stone-500 text-sm mb-6 italic">
+                  {copiedPromo ? '✓ Скопировано!' : 'Нажмите чтобы скопировать'}
+                </p>
                 <p className="text-stone-400 mb-8">
                   Свяжитесь через мессенджеры ниже и укажите этот код при записи!
                 </p>

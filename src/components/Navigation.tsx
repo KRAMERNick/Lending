@@ -32,7 +32,7 @@ export function Navigation() {
               Главная
             </button>
             <button onClick={() => scrollToSection('about')} className="text-stone-400 hover:text-stone-300 transition-colors">
-              О мне
+              Обо мне
             </button>
             <button onClick={() => scrollToSection('gallery')} className="text-stone-400 hover:text-stone-300 transition-colors">
               Галерея
