@@ -140,9 +140,9 @@ export function Pricing() {
         </div>
 
         {/* Additional Info */}
-        <div className="mt-16 space-y-6 text-center">
+        <div className="mt-16 space-y-6 text-center flex flex-col items-center">
           {/* Подарочные сертификаты */}
-          <div className="inline-flex items-center gap-3 px-8 py-5 bg-gradient-to-br from-stone-800/50 to-stone-900/50 backdrop-blur-xl rounded-2xl border border-stone-700/40 shadow-xl">
+          <div className="flex items-center gap-3 px-8 py-5 bg-gradient-to-br from-stone-800/50 to-stone-900/50 backdrop-blur-xl rounded-2xl border border-stone-700/40 shadow-xl max-w-3xl w-full sm:w-auto">
             <Gift className="w-8 h-8 sm:w-6 sm:h-6 text-stone-400 flex-shrink-0" />
             <p className="text-stone-300 text-sm sm:text-base">
               <span className="font-bold text-stone-200">Подарочные сертификаты</span> — доступны на любое количество занятий
@@ -150,7 +150,7 @@ export function Pricing() {
           </div>
 
           {/* Игра для скидки */}
-          <div className="inline-flex items-center gap-3 px-6 py-4 bg-stone-900/60 backdrop-blur-xl rounded-2xl border border-stone-700/40">
+          <div className="flex items-center gap-3 px-6 py-4 bg-stone-900/60 backdrop-blur-xl rounded-2xl border border-stone-700/40 max-w-3xl w-full sm:w-auto">
             <Sparkles className="w-7 h-7 sm:w-5 sm:h-5 text-stone-500 flex-shrink-0" />
             <p className="text-stone-400 text-xs sm:text-sm">
               💡 Хотите получить <span className="text-stone-300 font-bold">скидку 50%</span> на первое занятие? Пройдите мини-игру ниже и получите промокод!
