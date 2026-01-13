@@ -219,7 +219,7 @@ export function DrumGame() {
       <SubtleBackground variant={6} />
       
       <div className="container mx-auto px-2 sm:px-4 relative">
-        <div className="text-center mb-12">
+        <div className="text-center mb-8 sm:mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-stone-800/30 backdrop-blur-sm rounded-full mb-4 border border-stone-700/30">
             <Sparkles className="w-4 h-4 text-stone-400" />
             <span className="text-stone-400 text-sm">Интерактивная игра</span>
@@ -233,29 +233,29 @@ export function DrumGame() {
         </div>
 
         <div className="max-w-6xl mx-auto">
-          <div className="bg-stone-900/60 backdrop-blur-sm rounded-3xl p-2 sm:p-8 shadow-2xl border border-stone-800/20">
+          <div className="bg-stone-900/60 backdrop-blur-sm rounded-3xl p-3 sm:p-8 shadow-2xl border border-stone-800/20">
             {/* Instructions */}
             {!gameStarted && !isWinner && (
-              <div className="mb-8 p-6 sm:p-8 bg-gradient-to-br from-stone-800/30 to-stone-900/30 border-2 border-stone-700/40 rounded-2xl shadow-xl">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-stone-600 to-stone-700 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
-                    <Volume2 className="w-6 h-6 sm:w-7 sm:h-7 text-stone-100" />
+              <div className="mb-6 sm:mb-8 p-4 sm:p-6 md:p-8 bg-gradient-to-br from-stone-800/30 to-stone-900/30 border-2 border-stone-700/40 rounded-2xl shadow-xl">
+                <div className="flex items-start gap-3 sm:gap-4">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-gradient-to-br from-stone-600 to-stone-700 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <Volume2 className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-stone-100" />
                   </div>
-                  <div className="flex-1">
-                    <h3 className="text-stone-100 text-xl sm:text-2xl font-bold mb-3 flex items-center gap-2">
-                      <Sparkles className="w-5 h-5 text-stone-400" />
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-stone-100 text-lg sm:text-xl md:text-2xl font-bold mb-2 sm:mb-3 flex items-center gap-2">
+                      <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-stone-400" />
                       Задание для получения скидки:
                     </h3>
-                    <div className="bg-stone-950/50 p-4 rounded-xl border border-stone-700/30 mb-3">
-                      <p className="text-stone-200 text-base sm:text-lg font-semibold mb-2">
+                    <div className="bg-stone-950/50 p-3 sm:p-4 rounded-xl border border-stone-700/30 mb-2 sm:mb-3">
+                      <p className="text-stone-200 text-sm sm:text-base md:text-lg font-semibold mb-2">
                         Сыграйте ритм:
                       </p>
-                      <p className="text-stone-300 text-lg sm:text-2xl font-black tracking-wide">
+                      <p className="text-stone-300 text-base sm:text-lg md:text-2xl font-black tracking-wide">
                         Kick → Snare → Kick → Kick → Snare → Crash
                       </p>
                     </div>
-                    <p className="text-stone-400 text-sm sm:text-base">
-                      💡 <span className="font-semibold">Подсказка:</span> Кликайте на барабаны на изображении выше
+                    <p className="text-stone-400 text-xs sm:text-sm md:text-base">
+                      💡 <span className="font-semibold">Подсказка:</span> Кликайте на барабаны на изображении ниже
                     </p>
                   </div>
                 </div>
@@ -263,15 +263,15 @@ export function DrumGame() {
             )}
 
             {/* Progress */}
-            <div className="mb-8">
+            <div className="mb-6 sm:mb-8">
               <div className="flex items-center justify-center gap-2 mb-2">
-                <span className="text-stone-400 text-sm">Ваш ритм:</span>
+                <span className="text-stone-400 text-xs sm:text-sm">Ваш ритм:</span>
               </div>
-              <div className="flex justify-center gap-2 flex-wrap">
+              <div className="flex justify-center gap-1.5 sm:gap-2 flex-wrap">
                 {targetPattern.map((_, index) => (
                   <div
                     key={index}
-                    className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all shadow-md border-2 ${
+                    className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center transition-all shadow-md border-2 ${
                       userPattern[index]
                         ? userPattern[index] === targetPattern[index]
                           ? 'bg-gradient-to-br from-green-600 to-emerald-700 border-green-500/50 shadow-green-900/50'
@@ -280,7 +280,7 @@ export function DrumGame() {
                     }`}
                   >
                     {userPattern[index] && (
-                      <span className="text-white font-bold text-sm">
+                      <span className="text-white font-bold text-xs sm:text-sm">
                         {index + 1}
                       </span>
                     )}
@@ -290,12 +290,12 @@ export function DrumGame() {
             </div>
 
             {/* Full Drum Set with circular hit zones */}
-            <div className="relative mb-8">
-              <div className="relative rounded-2xl overflow-hidden border-2 border-stone-800/30">
+            <div className="relative mb-6 sm:mb-8">
+              <div className="relative rounded-xl sm:rounded-2xl overflow-hidden border-2 border-stone-800/30 mx-auto max-w-full">
                 <ImageWithFallback
                   src={drumSetImage}
                   alt="Drum Kit"
-                  className="w-full h-auto"
+                  className="w-full h-auto min-h-[300px] sm:min-h-0"
                 />
                 
                 {/* SVG overlay for circular zones */}
