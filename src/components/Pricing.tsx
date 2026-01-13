@@ -1,4 +1,4 @@
-import { Sparkles, TrendingUp, Zap, DollarSign, Star, Gift } from 'lucide-react';
+import { Sparkles, TrendingUp, Zap, DollarSign, Star, Gift, Percent } from 'lucide-react';
 import { SubtleBackground } from './SubtleBackground';
 
 export function Pricing() {
@@ -151,9 +151,9 @@ export function Pricing() {
 
           {/* Игра для скидки */}
           <div className="flex items-center gap-3 px-6 py-4 bg-stone-900/60 backdrop-blur-xl rounded-2xl border border-stone-700/40 max-w-3xl w-full sm:w-auto">
-            <Sparkles className="w-7 h-7 sm:w-5 sm:h-5 text-stone-500 flex-shrink-0" />
+            <Percent className="w-7 h-7 sm:w-5 sm:h-5 text-stone-500 flex-shrink-0" />
             <p className="text-stone-400 text-xs sm:text-sm">
-              💡 Хотите получить <span className="text-stone-300 font-bold">скидку 50%</span> на первое занятие? Пройдите мини-игру ниже и получите промокод!
+              Хотите получить <span className="text-stone-300 font-bold">скидку 50%</span> на первое занятие? Пройдите мини-игру ниже и получите промокод!
             </p>
           </div>
         </div>

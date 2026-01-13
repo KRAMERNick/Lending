@@ -50,7 +50,7 @@ export function Gallery() {
       isVertical: true
     },
     {
-      id: 'vLHkdrtUYLBoHSySsC5m7C',
+      id: 'pvFwjetxAHJoPSCTzGhxPZ',
       type: 'kinescope' as const,
       thumbnail: studentVideoCover3,
       title: 'Выступление ученика',
@@ -273,7 +273,7 @@ export function Gallery() {
                       : selectedVideo.type === 'streamable'
                       ? `https://streamable.com/e/${selectedVideo.id}?autoplay=1`
                       : selectedVideo.type === 'kinescope'
-                      ? `https://kinescope.io/embed/${selectedVideo.id}?autoplay=1&transparent=1`
+                      ? `https://kinescope.io/embed/${selectedVideo.id}?autoplay=1&controls=1&transparent=1`
                       : `https://rutube.ru/play/embed/${selectedVideo.id}?autoplay=1`
                   }
                   title="Video player"
@@ -282,12 +282,12 @@ export function Gallery() {
                   allowFullScreen
                   style={{ 
                     position: 'absolute',
-                    top: selectedVideoIndex === 2 ? '-80px' : (selectedVideoIndex === 5 ? '-10px' : (selectedVideoIndex === 0 || selectedVideoIndex === 1 || selectedVideoIndex === 4 ? '-10px' : '-2px')),
-                    left: selectedVideoIndex === 2 ? '-80px' : (selectedVideoIndex === 5 ? '-10px' : (selectedVideoIndex === 0 || selectedVideoIndex === 1 || selectedVideoIndex === 4 ? '-10px' : '-2px')),
-                    width: selectedVideoIndex === 2 ? 'calc(100% + 160px)' : (selectedVideoIndex === 5 ? 'calc(100% + 20px)' : (selectedVideoIndex === 0 || selectedVideoIndex === 1 || selectedVideoIndex === 4 ? 'calc(100% + 20px)' : 'calc(100% + 4px)')),
-                    height: selectedVideoIndex === 2 ? 'calc(100% + 160px)' : (selectedVideoIndex === 5 ? 'calc(100% + 20px)' : (selectedVideoIndex === 0 || selectedVideoIndex === 1 || selectedVideoIndex === 4 ? 'calc(100% + 20px)' : 'calc(100% + 4px)')),
+                    top: selectedVideoIndex === 2 ? '-10px' : (selectedVideoIndex === 5 ? '-10px' : (selectedVideoIndex === 0 || selectedVideoIndex === 1 || selectedVideoIndex === 4 ? '-10px' : '-2px')),
+                    left: selectedVideoIndex === 2 ? '-15px' : (selectedVideoIndex === 5 ? '-10px' : (selectedVideoIndex === 0 || selectedVideoIndex === 1 || selectedVideoIndex === 4 ? '-10px' : '-2px')),
+                    width: selectedVideoIndex === 2 ? 'calc(100% + 30px)' : (selectedVideoIndex === 5 ? 'calc(100% + 20px)' : (selectedVideoIndex === 0 || selectedVideoIndex === 1 || selectedVideoIndex === 4 ? 'calc(100% + 20px)' : 'calc(100% + 4px)')),
+                    height: selectedVideoIndex === 2 ? 'calc(100% + 20px)' : (selectedVideoIndex === 5 ? 'calc(100% + 20px)' : (selectedVideoIndex === 0 || selectedVideoIndex === 1 || selectedVideoIndex === 4 ? 'calc(100% + 20px)' : 'calc(100% + 4px)')),
                     border: 'none',
-                    transform: selectedVideoIndex === 2 ? 'scale(1.05)' : 'none'
+                    transform: 'none'
                   }}
                 ></iframe>
               </div>
