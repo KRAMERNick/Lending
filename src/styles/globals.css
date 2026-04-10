@@ -8,10 +8,11 @@
     --color-secondary: 168 140 115;
     --color-accent: 216 191 166;
     --color-muted: 45 38 30;
+    --border: 44 37 30;
   }
 
   * {
-    @apply border-border;
+    border-color: rgb(var(--border) / 0.2);
   }
 
   body {
