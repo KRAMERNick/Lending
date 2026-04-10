@@ -1,8 +1,7 @@
-import { Mail, Send, Check, MessageCircle, Send as SendIcon } from 'lucide-react';
-import { ImageWithFallback } from './figma/ImageWithFallback';
+import { Mail, Phone, Check, MessageCircle, Send as SendIcon, MapPin } from 'lucide-react';
+import telegramIcon from 'figma:asset/ca003a164c2f7a1a400743a0566e295195d2093a.png';
+import whatsappIcon from 'figma:asset/d45f0f82cf326f2be86a8b8d4a7dc37309a20aa4.png';
 import { SubtleBackground } from './SubtleBackground';
-import whatsappIcon from '/images/whatsapp-icon.png';
-import telegramIcon from '/images/telegram-icon.png';
 import { useState } from 'react';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
 
@@ -34,7 +33,7 @@ export function Contact() {
 
   const contactInfo = [
     { 
-      icon: Send, 
+      icon: Phone, 
       label: 'Телефон', 
       value: '+7 (901) 906-91-19',
       copyValue: '+79019069119',
@@ -48,9 +47,9 @@ export function Contact() {
       type: 'copy' as const
     },
     { 
-      icon: MessageCircle, 
+      icon: MapPin, 
       label: 'Адрес', 
-      value: 'Ленинградский просп., 47, стр. 1',
+      value: 'Ленинградский просп., 47, стр. 4',
       link: 'https://yandex.ru/maps/?pt=37.530822,55.799806&z=17&l=map',
       type: 'link' as const
     },
@@ -133,15 +132,17 @@ export function Contact() {
         setSubmitStatus('success');
         setStatusMessage(data.message);
         setFormData({ name: '', phone: '', message: '' });
-        
-        // Log any email errors from server
-        if (data.emailError) {
-          console.error('Server email error:', data.emailError);
-        }
       } else {
         setSubmitStatus('error');
-        setStatusMessage(data.error || 'Произошла ошибка. Попробуйте позже.');
+        // Show detailed error message from server
+        const errorMsg = data.error || data.message || 'Произошла ошибка. Попробуйте позже.';
+        setStatusMessage(errorMsg);
         console.error('Server error:', data);
+        
+        // Log detailed error info for debugging
+        if (data.emailError) {
+          console.error('Email error details:', data.emailError);
+        }
       }
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -177,7 +178,7 @@ export function Contact() {
       <div className="container mx-auto px-4 relative">
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-stone-800/30 backdrop-blur-sm rounded-full mb-4 border border-stone-700/30">
-            <Send className="w-4 h-4 text-stone-400" />
+            <Phone className="w-4 h-4 text-stone-400" />
             <span className="text-stone-400 text-sm">Свяжитесь со мной</span>
           </div>
           <h2 className="text-stone-100 mb-4">
@@ -200,7 +201,7 @@ export function Contact() {
                 className={`relative overflow-hidden flex flex-col items-center justify-center gap-3 p-6 rounded-2xl text-white transition-all transform hover:scale-105 shadow-lg shadow-stone-900/20 bg-gradient-to-br ${messenger.gradient}`}
               >
                 <div className="w-12 h-12 rounded-xl flex items-center justify-center overflow-hidden">
-                  <ImageWithFallback
+                  <img
                     src={messenger.icon}
                     alt={`${messenger.name} logo`}
                     className="w-10 h-10 object-contain brightness-0 invert"
@@ -310,7 +311,7 @@ export function Contact() {
         {/* Footer */}
         <div className="text-center mt-16 pt-8 border-t border-stone-800/20">
           <p className="text-stone-500">
-            © 2024 Николай Бокарев. Все права защищены.
+            © 2026 Николай Бокарев. Все права защищены.
           </p>
         </div>
       </div>

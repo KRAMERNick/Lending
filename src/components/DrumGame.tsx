@@ -1,8 +1,8 @@
-import { useState, useRef, useEffect } from 'react';
-import { Trophy, RotateCcw, Volume2, Sparkles, Copy, Check } from 'lucide-react';
+import { Gamepad2, Trophy, RotateCcw, Volume2, VolumeX, Info, X, CheckCircle, Sparkles, Copy } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import drumSetImage from 'figma:asset/f9c5a1903cc2c16dbc6fd4c231a7d0c613aca842.png';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { SubtleBackground } from './SubtleBackground';
-import drumSetImage from '/images/drum-set.png';
 
 type DrumPad = 'kick' | 'snare' | 'hihat' | 'tom1' | 'tom2' | 'tom3' | 'crash' | 'ride';
 
@@ -357,7 +357,7 @@ export function DrumGame() {
                   >
                     <p className="text-stone-100 font-bold text-3xl">РИТМ50</p>
                     {copiedPromo ? (
-                      <Check className="w-6 h-6 text-green-500" />
+                      <CheckCircle className="w-6 h-6 text-green-500" />
                     ) : (
                       <Copy className="w-6 h-6 text-stone-400 group-hover:text-stone-300 transition-colors" />
                     )}

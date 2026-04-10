@@ -34,7 +34,7 @@ export function Pricing() {
   ];
 
   return (
-    <section id="pricing" className="relative py-32 overflow-hidden">
+    <section id="pricing" className="relative py-32 overflow-hidden" itemScope itemType="https://schema.org/Service">
       {/* Subtle background */}
       <SubtleBackground variant={5} />
 
@@ -61,6 +61,8 @@ export function Pricing() {
               <div
                 key={index}
                 className="relative perspective-container"
+                itemScope 
+                itemType="https://schema.org/Offer"
               >
                 {/* Popular badge */}
                 {plan.popular && (
@@ -77,6 +79,10 @@ export function Pricing() {
                     ? 'bg-gradient-to-br from-stone-800/90 to-stone-900/90 border-stone-600/60 shadow-2xl shadow-stone-900/40 mt-6'
                     : 'bg-stone-900/70 border-stone-800/40 shadow-xl mt-8'
                 }`} style={{ willChange: 'transform' }}>
+                  <meta itemProp="priceCurrency" content="RUB" />
+                  <meta itemProp="price" content={plan.price.replace(/\s/g, '')} />
+                  <meta itemProp="availability" content="https://schema.org/InStock" />
+
                   {/* Diagonal accent */}
                   <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-stone-700/20 to-transparent transform rotate-45 translate-x-16 -translate-y-16"></div>
 

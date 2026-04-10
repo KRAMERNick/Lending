@@ -1,134 +1,65 @@
+import { Users2, Camera, Play, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { Play, X, Camera, ChevronLeft, ChevronRight } from 'lucide-react';
-import { ImageWithFallback } from './figma/ImageWithFallback';
+import studentPhoto1 from 'figma:asset/0f8cad6d745da7ebcd4af02866a7e546a8d0fa34.png';
+import studentPhoto2 from 'figma:asset/23ede886d79819a7330c9da22a52d6a724305991.png';
+import studentPhoto3 from 'figma:asset/d3e0da2cba3be06479716422bf23beb871551e7f.png';
+import studentVideoCover1 from 'figma:asset/df4d93e24a69f9b17ac385792c2619faa8ec3ec5.png';
+import studentVideoCover2 from 'figma:asset/b4b0a563cdc2025c3ebfb5ddd341ea61f54a3e37.png';
+import studentVideoCover3 from 'figma:asset/e43b963fa0dff232c4f57d648129675a0b3dac0f.png';
+import studentVideoCover4 from 'figma:asset/de7a2495f2f8d2f3ad84203c6a301ac495107d6b.png';
+import studentVideoCover5 from 'figma:asset/86e9f701e7365599c56df2949980f86f25ddbf35.png';
+import studentVideoCover6 from 'figma:asset/a144ceca796bf8cb0a61a132baee725039946920.png';
 import { SubtleBackground } from './SubtleBackground';
-import studentPhoto1 from '/images/student-photo-1.png';
-import studentPhoto2 from '/images/student-photo-2.png';
-import studentPhoto3 from '/images/student-photo-3.png';
-import studentVideoCover1 from '/images/student-video-cover-1.png';
-import studentVideoCover2 from '/images/student-video-cover-2.png';
-import studentVideoCover3 from '/images/student-video-cover-3.png';
-import studentVideoCover4 from '/images/student-video-cover-4.png';
-import studentVideoCover5 from '/images/student-video-cover-5.png';
-import studentVideoCover6 from '/images/student-video-cover-6.png';
 
 export function Gallery() {
-  const [selectedVideo, setSelectedVideo] = useState<{ id: string; type: 'youtube' | 'rutube' | 'streamable' | 'kinescope' } | null>(null);
-  const [selectedVideoIndex, setSelectedVideoIndex] = useState<number | null>(null);
-  const [selectedPhoto, setSelectedPhoto] = useState<{ url: string; alt: string } | null>(null);
-  const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
+  const [selectedMedia, setSelectedMedia] = useState<{ type: 'photo' | 'video'; url?: string; id?: string; videoType?: 'youtube' | 'rutube' | 'streamable' | 'kinescope' } | null>(null);
+  const [selectedMediaIndex, setSelectedMediaIndex] = useState<number | null>(null);
 
-  const photos = [
-    {
-      url: studentPhoto1,
-      alt: 'Ученик на уроке барабанов'
-    },
-    {
-      url: studentPhoto2,
-      alt: 'Ученик за барабанами'
-    },
-    {
-      url: studentPhoto3,
-      alt: 'Ученица на уроке'
-    }
+  const studentPhotos = [
+    { url: studentPhoto1, alt: 'Ученик на занятии 1' },
+    { url: studentPhoto2, alt: 'Ученик на занятии 2' },
+    { url: studentPhoto3, alt: 'Ученик на занятии 3' }
   ];
 
-  const videos = [
-    {
-      id: 'bgWWfdAhsdYD8RndehcpHx',
-      type: 'kinescope' as const,
-      thumbnail: studentVideoCover1,
-      title: 'Урок для начинающих',
-      isVertical: true
-    },
-    {
-      id: '3wCkwgKyLh89DgLnTqSu8t',
-      type: 'kinescope' as const,
-      thumbnail: studentVideoCover2,
-      title: 'Демонстрация техники',
-      isVertical: true
-    },
-    {
-      id: 'pvFwjetxAHJoPSCTzGhxPZ',
-      type: 'kinescope' as const,
-      thumbnail: studentVideoCover3,
-      title: 'Выступление ученика',
-      isVertical: true
-    },
-    {
-      id: '7MqU3hwf4HeN8eJsF8H8rv',
-      type: 'kinescope' as const,
-      thumbnail: studentVideoCover4,
-      title: 'Урок №4',
-      isVertical: false
-    },
-    {
-      id: '0CmeCjnaq4y9Kifjyk3h9k',
-      type: 'kinescope' as const,
-      thumbnail: studentVideoCover5,
-      title: 'Урок №5',
-      isVertical: true
-    },
-    {
-      id: 'u6d6TAKCnGhYDzpKDZPWTj',
-      type: 'kinescope' as const,
-      thumbnail: studentVideoCover6,
-      title: 'Урок №6',
-      isVertical: true
-    }
+  const studentVideos = [
+    { id: '7kHZpnipHJwN4VGYTHxfPm', type: 'kinescope' as const, label: 'Видео ученика 1', hasCover: true, cover: studentVideoCover1, isVertical: true },
+    { id: '69xETkNLqv8ZU9vXgUHHHj', type: 'kinescope' as const, label: 'Видео ученика 2', hasCover: true, cover: studentVideoCover2, isVertical: true },
+    { id: '3x97NaDumgm4vEE4XuZipB', type: 'kinescope' as const, label: 'Видео ученика 3', hasCover: true, cover: studentVideoCover3, isVertical: true },
+    { id: 'kW4yRnGzm8Nc3DuqaHQzZS', type: 'kinescope' as const, label: 'Видео ученика 4', hasCover: true, cover: studentVideoCover4, isVertical: false },
+    { id: '3tPL7cMtS42yMKkN1wf75V', type: 'kinescope' as const, label: 'Видео ученика 5', hasCover: true, cover: studentVideoCover5, isVertical: false },
+    { id: 'cXCZaQSDaRoKJH4Lnxm9Mk', type: 'kinescope' as const, label: 'Видео ученика 6', hasCover: true, cover: studentVideoCover6, isVertical: false }
   ];
 
   // Handle keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        setSelectedVideo(null);
-        setSelectedVideoIndex(null);
-        setSelectedPhoto(null);
-        setSelectedPhotoIndex(null);
+        setSelectedMedia(null);
+        setSelectedMediaIndex(null);
       }
 
-      if (selectedVideoIndex !== null) {
+      if (selectedMediaIndex !== null) {
         if (e.key === 'ArrowLeft') {
-          navigateVideo('prev');
+          navigateMedia('prev');
         } else if (e.key === 'ArrowRight') {
-          navigateVideo('next');
-        }
-      }
-
-      if (selectedPhotoIndex !== null) {
-        if (e.key === 'ArrowLeft') {
-          navigatePhoto('prev');
-        } else if (e.key === 'ArrowRight') {
-          navigatePhoto('next');
+          navigateMedia('next');
         }
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedVideoIndex, selectedPhotoIndex]);
+  }, [selectedMediaIndex]);
 
-  const navigateVideo = (direction: 'prev' | 'next') => {
-    if (selectedVideoIndex === null) return;
+  const navigateMedia = (direction: 'prev' | 'next') => {
+    if (selectedMediaIndex === null) return;
     
     const newIndex = direction === 'prev' 
-      ? (selectedVideoIndex - 1 + videos.length) % videos.length
-      : (selectedVideoIndex + 1) % videos.length;
+      ? (selectedMediaIndex - 1 + studentVideos.length) % studentVideos.length
+      : (selectedMediaIndex + 1) % studentVideos.length;
     
-    setSelectedVideoIndex(newIndex);
-    setSelectedVideo({ id: videos[newIndex].id, type: videos[newIndex].type });
-  };
-
-  const navigatePhoto = (direction: 'prev' | 'next') => {
-    if (selectedPhotoIndex === null) return;
-    
-    const newIndex = direction === 'prev' 
-      ? (selectedPhotoIndex - 1 + photos.length) % photos.length
-      : (selectedPhotoIndex + 1) % photos.length;
-    
-    setSelectedPhotoIndex(newIndex);
-    setSelectedPhoto(photos[newIndex]);
+    setSelectedMediaIndex(newIndex);
+    setSelectedMedia({ type: 'video', id: studentVideos[newIndex].id, videoType: studentVideos[newIndex].type });
   };
 
   return (
@@ -160,16 +91,16 @@ export function Gallery() {
 
         {/* Photos */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
-          {photos.map((photo, index) => (
+          {studentPhotos.map((photo, index) => (
             <div 
               key={index} 
               className="relative group overflow-hidden rounded-2xl aspect-square border border-stone-800/30 interactive-card cursor-pointer"
               onClick={() => {
-                setSelectedPhoto(photo);
-                setSelectedPhotoIndex(index);
+                setSelectedMedia({ type: 'photo', url: photo.url });
+                setSelectedMediaIndex(index);
               }}
             >
-              <ImageWithFallback
+              <img
                 src={photo.url}
                 alt={photo.alt}
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
@@ -188,18 +119,18 @@ export function Gallery() {
 
         {/* Videos - Compact grid for mobile */}
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-          {videos.map((video, index) => (
+          {studentVideos.map((video, index) => (
             <div 
               key={index}
               onClick={() => {
-                setSelectedVideo({ id: video.id, type: video.type });
-                setSelectedVideoIndex(index);
+                setSelectedMedia({ type: 'video', id: video.id, videoType: video.type });
+                setSelectedMediaIndex(index);
               }}
               className="relative group cursor-pointer overflow-hidden rounded-xl lg:rounded-2xl aspect-square border border-stone-800/30 interactive-card"
             >
-              <ImageWithFallback
-                src={video.thumbnail}
-                alt={video.title}
+              <img
+                src={video.cover}
+                alt={video.label}
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent pointer-events-none"></div>
@@ -213,19 +144,19 @@ export function Gallery() {
         </div>
 
         {/* Video Modal */}
-        {selectedVideo && selectedVideoIndex !== null && (
+        {selectedMedia && selectedMedia.type === 'video' && selectedMediaIndex !== null && (
           <div 
             className="fixed inset-0 bg-stone-950/90 backdrop-blur-lg z-50 flex items-center justify-center p-4"
             onClick={() => {
-              setSelectedVideo(null);
-              setSelectedVideoIndex(null);
+              setSelectedMedia(null);
+              setSelectedMediaIndex(null);
             }}
           >
             <button 
               className="absolute top-4 right-4 w-12 h-12 bg-stone-800/60 backdrop-blur-sm rounded-full flex items-center justify-center text-stone-100 hover:bg-stone-700/70 hover:scale-110 transition-all border border-stone-700/50 z-10"
               onClick={() => {
-                setSelectedVideo(null);
-                setSelectedVideoIndex(null);
+                setSelectedMedia(null);
+                setSelectedMediaIndex(null);
               }}
             >
               <X className="w-6 h-6" />
@@ -236,7 +167,7 @@ export function Gallery() {
               className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-stone-800/60 backdrop-blur-sm rounded-full flex items-center justify-center text-stone-100 hover:bg-stone-700/70 hover:scale-110 transition-all border border-stone-700/50 z-10"
               onClick={(e) => {
                 e.stopPropagation();
-                navigateVideo('prev');
+                navigateMedia('prev');
               }}
             >
               <ChevronLeft className="w-6 h-6" />
@@ -245,7 +176,7 @@ export function Gallery() {
               className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-stone-800/60 backdrop-blur-sm rounded-full flex items-center justify-center text-stone-100 hover:bg-stone-700/70 hover:scale-110 transition-all border border-stone-700/50 z-10"
               onClick={(e) => {
                 e.stopPropagation();
-                navigateVideo('next');
+                navigateMedia('next');
               }}
             >
               <ChevronRight className="w-6 h-6" />
@@ -258,22 +189,22 @@ export function Gallery() {
               <div 
                 className="relative rounded-2xl overflow-hidden bg-black"
                 style={{
-                  width: videos[selectedVideoIndex].isVertical ? 'min(90vw, calc(85vh * 9 / 16))' : 'min(90vw, 1200px)',
-                  height: videos[selectedVideoIndex].isVertical ? 'min(85vh, calc(90vw * 16 / 9))' : 'auto',
-                  aspectRatio: videos[selectedVideoIndex].isVertical ? '9 / 16' : '16 / 9'
+                  width: studentVideos[selectedMediaIndex].isVertical ? 'min(90vw, calc(85vh * 9 / 16))' : 'min(90vw, 1200px)',
+                  height: studentVideos[selectedMediaIndex].isVertical ? 'min(85vh, calc(90vw * 16 / 9))' : 'auto',
+                  aspectRatio: studentVideos[selectedMediaIndex].isVertical ? '9 / 16' : '16 / 9'
                 }}
               >
                 <iframe
                   width="100%"
                   height="100%"
                   src={
-                    selectedVideo.type === 'youtube' 
-                      ? `https://www.youtube.com/embed/${selectedVideo.id}?autoplay=1` 
-                      : selectedVideo.type === 'streamable'
-                      ? `https://streamable.com/e/${selectedVideo.id}?autoplay=1`
-                      : selectedVideo.type === 'kinescope'
-                      ? `https://kinescope.io/embed/${selectedVideo.id}?autoplay=1&controls=1&transparent=1`
-                      : `https://rutube.ru/play/embed/${selectedVideo.id}?autoplay=1`
+                    selectedMedia.videoType === 'youtube' 
+                      ? `https://www.youtube.com/embed/${selectedMedia.id}?autoplay=1` 
+                      : selectedMedia.videoType === 'streamable'
+                      ? `https://streamable.com/e/${selectedMedia.id}?autoplay=1`
+                      : selectedMedia.videoType === 'kinescope'
+                      ? `https://kinescope.io/embed/${selectedMedia.id}?autoplay=1&controls=1&transparent=1`
+                      : `https://rutube.ru/play/embed/${selectedMedia.id}?autoplay=1`
                   }
                   title="Video player"
                   frameBorder="0"
@@ -281,10 +212,10 @@ export function Gallery() {
                   allowFullScreen
                   style={{ 
                     position: 'absolute',
-                    top: selectedVideoIndex === 2 ? '-10px' : (selectedVideoIndex === 5 ? '-10px' : (selectedVideoIndex === 0 || selectedVideoIndex === 1 || selectedVideoIndex === 4 ? '-10px' : '-2px')),
-                    left: selectedVideoIndex === 2 ? '-15px' : (selectedVideoIndex === 5 ? '-10px' : (selectedVideoIndex === 0 || selectedVideoIndex === 1 || selectedVideoIndex === 4 ? '-10px' : '-2px')),
-                    width: selectedVideoIndex === 2 ? 'calc(100% + 30px)' : (selectedVideoIndex === 5 ? 'calc(100% + 20px)' : (selectedVideoIndex === 0 || selectedVideoIndex === 1 || selectedVideoIndex === 4 ? 'calc(100% + 20px)' : 'calc(100% + 4px)')),
-                    height: selectedVideoIndex === 2 ? 'calc(100% + 20px)' : (selectedVideoIndex === 5 ? 'calc(100% + 20px)' : (selectedVideoIndex === 0 || selectedVideoIndex === 1 || selectedVideoIndex === 4 ? 'calc(100% + 20px)' : 'calc(100% + 4px)')),
+                    top: selectedMediaIndex === 2 ? '-10px' : (selectedMediaIndex === 5 ? '-10px' : (selectedMediaIndex === 0 || selectedMediaIndex === 1 || selectedMediaIndex === 4 ? '-10px' : '-2px')),
+                    left: selectedMediaIndex === 2 ? '-15px' : (selectedMediaIndex === 5 ? '-10px' : (selectedMediaIndex === 0 || selectedMediaIndex === 1 || selectedMediaIndex === 4 ? '-10px' : '-2px')),
+                    width: selectedMediaIndex === 2 ? 'calc(100% + 30px)' : (selectedMediaIndex === 5 ? 'calc(100% + 20px)' : (selectedMediaIndex === 0 || selectedMediaIndex === 1 || selectedMediaIndex === 4 ? 'calc(100% + 20px)' : 'calc(100% + 4px)')),
+                    height: selectedMediaIndex === 2 ? 'calc(100% + 20px)' : (selectedMediaIndex === 5 ? 'calc(100% + 20px)' : (selectedMediaIndex === 0 || selectedMediaIndex === 1 || selectedMediaIndex === 4 ? 'calc(100% + 20px)' : 'calc(100% + 4px)')),
                     border: 'none',
                     transform: 'none'
                   }}
@@ -295,19 +226,19 @@ export function Gallery() {
         )}
 
         {/* Photo Modal */}
-        {selectedPhoto && selectedPhotoIndex !== null && (
+        {selectedMedia && selectedMedia.type === 'photo' && selectedMediaIndex !== null && (
           <div 
             className="fixed inset-0 bg-stone-950/90 backdrop-blur-lg z-50 flex items-center justify-center p-4"
             onClick={() => {
-              setSelectedPhoto(null);
-              setSelectedPhotoIndex(null);
+              setSelectedMedia(null);
+              setSelectedMediaIndex(null);
             }}
           >
             <button 
               className="absolute top-4 right-4 w-12 h-12 bg-stone-800/60 backdrop-blur-sm rounded-full flex items-center justify-center text-stone-100 hover:bg-stone-700/70 hover:scale-110 transition-all border border-stone-700/50 z-10"
               onClick={() => {
-                setSelectedPhoto(null);
-                setSelectedPhotoIndex(null);
+                setSelectedMedia(null);
+                setSelectedMediaIndex(null);
               }}
             >
               <X className="w-6 h-6" />
@@ -318,7 +249,7 @@ export function Gallery() {
               className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-stone-800/60 backdrop-blur-sm rounded-full flex items-center justify-center text-stone-100 hover:bg-stone-700/70 hover:scale-110 transition-all border border-stone-700/50 z-10"
               onClick={(e) => {
                 e.stopPropagation();
-                navigatePhoto('prev');
+                navigateMedia('prev');
               }}
             >
               <ChevronLeft className="w-6 h-6" />
@@ -327,16 +258,16 @@ export function Gallery() {
               className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-stone-800/60 backdrop-blur-sm rounded-full flex items-center justify-center text-stone-100 hover:bg-stone-700/70 hover:scale-110 transition-all border border-stone-700/50 z-10"
               onClick={(e) => {
                 e.stopPropagation();
-                navigatePhoto('next');
+                navigateMedia('next');
               }}
             >
               <ChevronRight className="w-6 h-6" />
             </button>
 
             <div className="max-w-7xl max-h-[90vh] w-full flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
-              <ImageWithFallback
-                src={selectedPhoto.url}
-                alt={selectedPhoto.alt}
+              <img
+                src={selectedMedia.url}
+                alt={studentPhotos[selectedMediaIndex].alt}
                 className="max-w-full max-h-[90vh] object-contain rounded-2xl"
               />
             </div>

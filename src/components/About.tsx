@@ -1,14 +1,14 @@
 import { Award, Music, Users, Star, Play, X, ChevronLeft, ChevronRight, User } from 'lucide-react';
+import profilePhoto from 'figma:asset/9a7c84808894f027f24365ed3a4155afc704e9a3.png';
+import videoCover1 from 'figma:asset/4364420682c48158cc589a8501d352bf3bbc7013.png';
+import videoCover2 from 'figma:asset/20ed7f87d029627523b42771ba245745c1f142ff.png';
+import videoCover3 from 'figma:asset/c0768d8f50d011570bfe108f542b8de0b9d670a3.png';
+import videoCover4 from 'figma:asset/6a83b3e2f2f52c0a1ff9014cccf8421c35861eac.png';
+import videoCover5 from 'figma:asset/a77706c79df8d1c4de9fe08ec1957e3132e768b9.png';
+import videoCover6 from 'figma:asset/de8490f3b66ac630cea97101df7fb1083bf3eab0.png';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { SubtleBackground } from './SubtleBackground';
 import { useState, useEffect } from 'react';
-import profilePhoto from '/images/profile-photo.png';
-import videoCover1 from '/images/video-cover-1.png';
-import videoCover2 from '/images/video-cover-2.png';
-import videoCover3 from '/images/video-cover-3.png';
-import videoCover4 from '/images/video-cover-4.png';
-import videoCover5 from '/images/video-cover-5.png';
-import videoCover6 from '/images/video-cover-6.png';
 
 export function About() {
   const [selectedVideo, setSelectedVideo] = useState<{ id: string; type: 'youtube' | 'rutube' | 'streamable' | 'kinescope' } | null>(null);
@@ -61,7 +61,7 @@ export function About() {
   ];
 
   return (
-    <section id="about" className="relative py-32 overflow-hidden">
+    <section id="about" className="relative py-32 overflow-hidden" itemScope itemType="https://schema.org/Person">
       {/* Subtle background */}
       <SubtleBackground variant={2} />
       
@@ -89,10 +89,11 @@ export function About() {
               <div className="absolute -inset-2 border-2 border-stone-700/30 transform -rotate-2 rounded-3xl"></div>
               
               <div className="relative overflow-hidden rounded-3xl">
-                <ImageWithFallback
+                <img
                   src={profilePhoto}
-                  alt="Николай Бокарев"
+                  alt="Николай Бокарев - профессиональный преподаватель барабанов в Москве с 5-летним опытом обучения детей и взрослых"
                   className="w-full h-[600px] object-cover"
+                  itemProp="image"
                 />
                 {/* Gradient overlays */}
                 <div className="absolute inset-0 bg-gradient-to-t from-stone-950/70 via-transparent to-transparent"></div>
@@ -108,9 +109,9 @@ export function About() {
           <div className="lg:col-span-7">
             <div className="space-y-6 text-stone-300 text-lg leading-relaxed">
               <p className="text-xl">
-                Привет! Я <span className="text-stone-100 font-bold">Николай Бокарев</span>, и барабаны — это моя <span className="gradient-text font-semibold">страсть и призвание</span>. 
+                Привет! Я <span className="text-stone-100 font-bold" itemProp="name">Николай Бокарев</span>, и барабаны — это моя <span className="gradient-text font-semibold">страсть и призвание</span>. 
               </p>
-              <p>
+              <p itemProp="description">
                 Я верю, что каждый человек может научиться играть на барабанах, независимо от возраста 
                 и уровня подготовки. Работаю с детьми от 7 лет и взрослыми, которые всегда мечтали попробовать.
               </p>
@@ -171,7 +172,7 @@ export function About() {
               >
                 {video.hasCover ? (
                   <>
-                    <ImageWithFallback
+                    <img
                       src={video.cover!}
                       alt={video.label}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"

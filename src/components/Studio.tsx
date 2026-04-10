@@ -1,10 +1,9 @@
-import { MapPin, Car, Clock, X } from 'lucide-react';
-import { ImageWithFallback } from './figma/ImageWithFallback';
+import { MapPin, Car, X } from 'lucide-react';
+import studioImage1 from 'figma:asset/096d705629012b2f1004a0738c0e87bdcca91bcb.png';
+import studioImage2 from 'figma:asset/9d4831b1963db42d157a35e9ab0547b8b4c619f6.png';
+import studioImage3 from 'figma:asset/d6c8368137dc006dfeaca8a9aa289c946e8e3b32.png';
 import { SubtleBackground } from './SubtleBackground';
 import { useState } from 'react';
-import studioImage1 from '/images/studio-photo-1.png';
-import studioImage2 from '/images/studio-photo-2.png';
-import studioImage3 from '/images/studio-photo-3.png';
 
 export function Studio() {
   const [selectedPhoto, setSelectedPhoto] = useState<{ url: string; alt: string } | null>(null);
@@ -16,7 +15,7 @@ export function Studio() {
   ];
 
   return (
-    <section id="studio" className="py-24 relative overflow-hidden">
+    <section id="studio" className="py-24 relative overflow-hidden" itemScope itemType="https://schema.org/Place">
       {/* Subtle background */}
       <SubtleBackground variant={4} />
       
@@ -43,23 +42,24 @@ export function Studio() {
           <div className="grid md:grid-cols-3 gap-6 mb-12">
             <div className="relative group cursor-pointer" onClick={() => setSelectedPhoto(studioPhotos[0])}>
               <div className="absolute inset-0 bg-gradient-to-br from-stone-700/20 to-stone-600/20 rounded-3xl transform rotate-2 group-hover:rotate-3 transition-transform blur-xl"></div>
-              <ImageWithFallback
+              <img
                 src={studioImage1}
-                alt="Chayka Studio - Барабанная установка"
+                alt="Chayka Studio на Ленинградском проспекте - профессиональная барабанная установка для уроков"
                 className="relative rounded-3xl shadow-2xl w-full h-[300px] object-cover border-2 border-stone-800/30"
+                itemProp="image"
               />
             </div>
             <div className="relative group cursor-pointer" onClick={() => setSelectedPhoto(studioPhotos[1])}>
               <div className="absolute inset-0 bg-gradient-to-br from-stone-700/20 to-stone-600/20 rounded-3xl transform -rotate-2 group-hover:-rotate-3 transition-transform blur-xl"></div>
-              <ImageWithFallback
+              <img
                 src={studioImage2}
-                alt="Chayka Studio - Интерьер"
+                alt="Chayka Studio - уютный интерьер студии для обучения игре на барабанах в Москве"
                 className="relative rounded-3xl shadow-2xl w-full h-[300px] object-cover border-2 border-stone-800/30"
               />
             </div>
             <div className="relative group cursor-pointer" onClick={() => setSelectedPhoto(studioPhotos[2])}>
               <div className="absolute inset-0 bg-gradient-to-br from-stone-700/20 to-stone-600/20 rounded-3xl transform rotate-1 group-hover:rotate-2 transition-transform blur-xl"></div>
-              <ImageWithFallback
+              <img
                 src={studioImage3}
                 alt="Chayka Studio - Оборудование"
                 className="relative rounded-3xl shadow-2xl w-full h-[300px] object-cover border-2 border-stone-800/30"
@@ -68,7 +68,7 @@ export function Studio() {
           </div>
 
           {/* Studio Info */}
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 gap-6">
             <div className="bg-stone-900/60 backdrop-blur-sm rounded-2xl p-6 border border-stone-800/20 shadow-lg">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-gradient-to-br from-stone-600 to-stone-700 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-stone-900/50">
@@ -77,7 +77,7 @@ export function Studio() {
                 <div>
                   <h3 className="text-stone-100 mb-2">Адрес студии</h3>
                   <p className="text-stone-300 text-sm">
-                    Москва, Ленинградский просп., 47, стр. 1
+                    Москва, Ленинградский просп., 47, стр. 4
                   </p>
                 </div>
               </div>
@@ -91,21 +91,7 @@ export function Studio() {
                 <div>
                   <h3 className="text-stone-100 mb-2">Выездные занятия</h3>
                   <p className="text-stone-300 text-sm">
-                    Провожу занятия с выездом на другие площадки по всей Москве.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-br from-stone-800/30 to-stone-900/30 rounded-2xl p-6 border border-stone-700/30">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-stone-500 to-stone-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-stone-900/50">
-                  <Clock className="w-6 h-6 text-stone-100" />
-                </div>
-                <div>
-                  <h3 className="text-stone-100 mb-2">График занятий</h3>
-                  <p className="text-stone-300 text-sm">
-                    Занятия проходят в удобное для вас время.
+                    Провожу занятия с выездом на дугие площадки по всей Москве.
                   </p>
                 </div>
               </div>
@@ -127,7 +113,7 @@ export function Studio() {
             <X className="w-6 h-6" />
           </button>
           <div className="max-w-7xl max-h-[90vh] w-full flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
-            <ImageWithFallback
+            <img
               src={selectedPhoto.url}
               alt={selectedPhoto.alt}
               className="max-w-full max-h-[90vh] object-contain"

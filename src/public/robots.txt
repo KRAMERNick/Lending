@@ -1,0 +1,24 @@
+# robots.txt for Николай Бокарев - Школа барабанов
+User-agent: *
+Allow: /
+Allow: /#about
+Allow: /#studio
+Allow: /#pricing
+Allow: /#contact
+Allow: /#game
+
+# Sitemaps
+Sitemap: https://nikolai-bokarev-drums.ru/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 0
+
+# Allow all search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Yandex
+Allow: /
+
+User-agent: Bingbot
+Allow: /

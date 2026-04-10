@@ -61,68 +61,68 @@ app.post("/make-server-e4ef8ce5/contact", async (c) => {
     console.log(`API Key (last 5 chars): ${resendApiKey?.substring(resendApiKey.length - 5) || 'N/A'}`);
     console.log('===========================');
     
-    if (resendApiKey) {
-      try {
-        // Trim whitespace from API key
-        const trimmedApiKey = resendApiKey.trim();
-        
-        console.log('Attempting to send email via Resend...');
-        const emailResponse = await fetch('https://api.resend.com/emails', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${trimmedApiKey}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            from: 'Сайт Николая Бокарева <onboarding@resend.dev>',
-            to: ['hunternicke@mail.ru'],
-            subject: `Новая заявка на урок от ${name}`,
-            html: `
-              <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                <h2 style="color: #292524;">Новая заявка на урок барабанов</h2>
-                <div style="background-color: #f5f5f4; padding: 20px; border-radius: 8px; margin: 20px 0;">
-                  <p style="margin: 10px 0;"><strong>Имя:</strong> ${name}</p>
-                  <p style="margin: 10px 0;"><strong>Телефон:</strong> ${phone}</p>
-                  ${message ? `<p style="margin: 10px 0;"><strong>Сообщение:</strong> ${message}</p>` : ''}
-                  <p style="margin: 10px 0; color: #78716c;"><strong>Дата:</strong> ${new Date(timestamp).toLocaleString('ru-RU')}</p>
-                </div>
-                <p style="color: #57534e;">Свяжитесь с клиентом в ближайшее время!</p>
-                <hr style="margin: 20px 0; border: none; border-top: 1px solid #e7e5e4;">
-                <p style="color: #a8a29e; font-size: 12px;">Письмо отправлено на hunternicke@mail.ru. Вы можете настроить автопересылку на bn-school@yandex.ru в настройках почты.</p>
-              </div>
-            `
-          })
-        });
-
-        console.log(`Resend API response status: ${emailResponse.status}`);
-        
-        const emailData = await emailResponse.json();
-        console.log('Resend API response:', JSON.stringify(emailData));
-
-        if (!emailResponse.ok) {
-          console.error('Error sending email via Resend:', emailData);
-          return c.json({ 
-            success: true, 
-            message: "Заявка сохранена, но письмо не отправлено. Ошибка Resend: " + JSON.stringify(emailData),
-            emailError: emailData
-          });
-        } else {
-          console.log('Email sent successfully via Resend');
-        }
-      } catch (emailError) {
-        console.error('Error while sending email notification:', emailError);
-        return c.json({ 
-          success: true, 
-          message: "Заявка сохранена, но произошла ошибка при отправке письма: " + String(emailError),
-          emailError: String(emailError)
-        });
-      }
-    } else {
-      console.warn('RESEND_API_KEY not configured - email notification skipped');
+    if (!resendApiKey) {
+      console.error('CRITICAL: RESEND_API_KEY not configured!');
       return c.json({ 
-        success: true, 
-        message: "Заявка сохранена, но RESEND_API_KEY не настроен" 
+        error: "Не удалось отправить письмо: API ключ не настроен. Заявка сохранена, свяжитесь через WhatsApp/Telegram.",
+        success: false
+      }, 500);
+    }
+    
+    try {
+      // Trim whitespace from API key
+      const trimmedApiKey = resendApiKey.trim();
+      
+      console.log('Attempting to send email via Resend...');
+      const emailResponse = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${trimmedApiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          from: 'Сайт Николая Бокарева <onboarding@resend.dev>',
+          to: ['hunternicke@mail.ru'],
+          subject: `Новая заявка на урок от ${name}`,
+          html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+              <h2 style="color: #292524;">Новая заявка на урок барабанов</h2>
+              <div style="background-color: #f5f5f4; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <p style="margin: 10px 0;"><strong>Имя:</strong> ${name}</p>
+                <p style="margin: 10px 0;"><strong>Телефон:</strong> ${phone}</p>
+                ${message ? `<p style="margin: 10px 0;"><strong>Сообщение:</strong> ${message}</p>` : ''}
+                <p style="margin: 10px 0; color: #78716c;"><strong>Дата:</strong> ${new Date(timestamp).toLocaleString('ru-RU')}</p>
+              </div>
+              <p style="color: #57534e;">Свяжитесь с клиентом в ближайшее время!</p>
+              <hr style="margin: 20px 0; border: none; border-top: 1px solid #e7e5e4;">
+              <p style="color: #a8a29e; font-size: 12px;">Письмо отправлено на hunternicke@mail.ru. Вы можете настроить автопересылку на bn-school@yandex.ru в настройках почты.</p>
+            </div>
+          `
+        })
       });
+
+      console.log(`Resend API response status: ${emailResponse.status}`);
+      
+      const emailData = await emailResponse.json();
+      console.log('Resend API response:', JSON.stringify(emailData));
+
+      if (!emailResponse.ok) {
+        console.error('Error sending email via Resend:', emailData);
+        return c.json({ 
+          error: `Не удалось отправить письмо. Ошибка Resend API: ${emailData.message || JSON.stringify(emailData)}. Заявка сохранена, свяжитесь через WhatsApp/Telegram.`,
+          success: false,
+          emailError: emailData
+        }, 500);
+      }
+      
+      console.log('Email sent successfully via Resend, ID:', emailData.id);
+    } catch (emailError) {
+      console.error('Exception while sending email notification:', emailError);
+      return c.json({ 
+        error: `Не удалось отправить письмо: ${String(emailError)}. Заявка сохранена, свяжитесь через WhatsApp/Telegram.`,
+        success: false,
+        emailError: String(emailError)
+      }, 500);
     }
 
     return c.json({ 
