@@ -260,7 +260,7 @@ export function About() {
                     : selectedVideo.type === 'streamable'
                     ? `https://streamable.com/e/${selectedVideo.id}?autoplay=1`
                     : selectedVideo.type === 'kinescope'
-                    ? `https://kinescope.io/embed/${selectedVideo.id}?autoplay=1&transparent=1`
+                    ? `https://kinescope.io/embed/${selectedVideo.id}?muted=0&autoplay=0&controls=1&preload=metadata`
                     : `https://rutube.ru/play/embed/${selectedVideo.id}?autoplay=1`
                 }
                 title="Video player"

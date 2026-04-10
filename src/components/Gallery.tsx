@@ -203,7 +203,7 @@ export function Gallery() {
                       : selectedMedia.videoType === 'streamable'
                       ? `https://streamable.com/e/${selectedMedia.id}?autoplay=1`
                       : selectedMedia.videoType === 'kinescope'
-                      ? `https://kinescope.io/embed/${selectedMedia.id}?autoplay=1&controls=1&transparent=1`
+                      ? `https://kinescope.io/embed/${selectedMedia.id}?muted=0&autoplay=0&controls=1&preload=metadata`
                       : `https://rutube.ru/play/embed/${selectedMedia.id}?autoplay=1`
                   }
                   title="Video player"
