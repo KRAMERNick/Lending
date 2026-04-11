@@ -268,11 +268,8 @@ export function About() {
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 style={{ 
-                  position: 'absolute',
-                  top: videos[selectedVideoIndex].isVertical ? '-10px' : '-2px',
-                  left: videos[selectedVideoIndex].isVertical ? '-10px' : '-2px',
-                  width: videos[selectedVideoIndex].isVertical ? 'calc(100% + 20px)' : 'calc(100% + 4px)',
-                  height: videos[selectedVideoIndex].isVertical ? 'calc(100% + 20px)' : 'calc(100% + 4px)',
+                  width: '100%',
+                  height: '100%',
                   border: 'none'
                 }}
               ></iframe>

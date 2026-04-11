@@ -22,12 +22,12 @@ export function Gallery() {
   ];
 
   const studentVideos = [
-    { id: '7kHZpnipHJwN4VGYTHxfPm', type: 'kinescope' as const, label: 'Видео ученика 1', hasCover: true, cover: studentVideoCover1, isVertical: true },
-    { id: '69xETkNLqv8ZU9vXgUHHHj', type: 'kinescope' as const, label: 'Видео ученика 2', hasCover: true, cover: studentVideoCover2, isVertical: true },
-    { id: '3x97NaDumgm4vEE4XuZipB', type: 'kinescope' as const, label: 'Видео ученика 3', hasCover: true, cover: studentVideoCover3, isVertical: true },
-    { id: 'kW4yRnGzm8Nc3DuqaHQzZS', type: 'kinescope' as const, label: 'Видео ученика 4', hasCover: true, cover: studentVideoCover4, isVertical: false },
-    { id: '3tPL7cMtS42yMKkN1wf75V', type: 'kinescope' as const, label: 'Видео ученика 5', hasCover: true, cover: studentVideoCover5, isVertical: false },
-    { id: 'cXCZaQSDaRoKJH4Lnxm9Mk', type: 'kinescope' as const, label: 'Видео ученика 6', hasCover: true, cover: studentVideoCover6, isVertical: false }
+    { id: 'bgWWfdAhsdYD8RndehcpHx', type: 'kinescope' as const, label: 'Видео ученика 1', hasCover: true, cover: studentVideoCover1, isVertical: true },
+    { id: '3wCkwgKyLh89DgLnTqSu8t', type: 'kinescope' as const, label: 'Видео ученика 2', hasCover: true, cover: studentVideoCover2, isVertical: true },
+    { id: 'pvFwjetxAHJoPSCTzGhxPZ', type: 'kinescope' as const, label: 'Видео ученика 3', hasCover: true, cover: studentVideoCover3, isVertical: true },
+    { id: '7MqU3hwf4HeN8eJsF8H8rv', type: 'kinescope' as const, label: 'Видео ученика 4', hasCover: true, cover: studentVideoCover4, isVertical: false },
+    { id: '0CmeCjnaq4y9Kifjyk3h9k', type: 'kinescope' as const, label: 'Видео ученика 5', hasCover: true, cover: studentVideoCover5, isVertical: false },
+    { id: 'u6d6TAKCnGhYDzpKDZPWTj', type: 'kinescope' as const, label: 'Видео ученика 6', hasCover: true, cover: studentVideoCover6, isVertical: false }
   ];
 
   // Handle keyboard navigation
@@ -211,13 +211,9 @@ export function Gallery() {
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                   style={{ 
-                    position: 'absolute',
-                    top: selectedMediaIndex === 2 ? '-10px' : (selectedMediaIndex === 5 ? '-10px' : (selectedMediaIndex === 0 || selectedMediaIndex === 1 || selectedMediaIndex === 4 ? '-10px' : '-2px')),
-                    left: selectedMediaIndex === 2 ? '-15px' : (selectedMediaIndex === 5 ? '-10px' : (selectedMediaIndex === 0 || selectedMediaIndex === 1 || selectedMediaIndex === 4 ? '-10px' : '-2px')),
-                    width: selectedMediaIndex === 2 ? 'calc(100% + 30px)' : (selectedMediaIndex === 5 ? 'calc(100% + 20px)' : (selectedMediaIndex === 0 || selectedMediaIndex === 1 || selectedMediaIndex === 4 ? 'calc(100% + 20px)' : 'calc(100% + 4px)')),
-                    height: selectedMediaIndex === 2 ? 'calc(100% + 20px)' : (selectedMediaIndex === 5 ? 'calc(100% + 20px)' : (selectedMediaIndex === 0 || selectedMediaIndex === 1 || selectedMediaIndex === 4 ? 'calc(100% + 20px)' : 'calc(100% + 4px)')),
-                    border: 'none',
-                    transform: 'none'
+                    width: '100%',
+                    height: '100%',
+                    border: 'none'
                   }}
                 ></iframe>
               </div>
